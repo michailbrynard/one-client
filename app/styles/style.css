@@ -1,1 +1,9 @@
 /* Empty. Add your own CSS if you like */
+
+.has-footer.has-tabs {
+    bottom: 93px;
+}
+
+.sub-footer {
+    bottom: 50px !important;
+}

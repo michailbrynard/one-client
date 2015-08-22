@@ -1,0 +1,15 @@
+<ion-view view-title="Channels">
+    <ion-content>
+        <ion-list ng-show="channels">
+            <ion-item class="item-icon-left" ng-repeat="channel in channels" type="item-text-wrap" ng-click="openChat(channel.id)">
+                <i class="icon {{channel.icon}}"></i>
+                <h2>{{channel.expert}}</h2>
+            </ion-item>
+        </ion-list>
+        <ion-list ng-hide="channels.length">
+            <ion-item class="textCenter">
+                <i class="icon ion-loading-c"></i> Loading Channels
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

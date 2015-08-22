@@ -1,0 +1,23 @@
+<ion-view view-title="Pick a Category">
+    <ion-content class="padding">
+        <label class="item item-select">
+            <div class="input-label">
+                Select Category
+            </div>
+            <select ng-model="categoryId">
+                <option value = "1" selected = "selected">Food</option>
+                <option value = "2">Culture</option>
+                <option value = "3">Nightlife</option>
+                <option value = "4">Shopping</option>
+                <option value = "5">Adventure</option>
+                <option value = "6">Picnics</option>
+                <option value = "6">Pubs/Bars</option>
+                <option value = "7">Transport</option>
+                <option value = "8">Other</option>
+            </select>
+        </label>
+        <button ng-click="selectCategory(cityId,categoryId)" class="button button-block button-positive">
+            Next
+        </button>
+    </ion-content>
+</ion-view>

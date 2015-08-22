@@ -20,7 +20,7 @@ var Orchestrator = require('orchestrator');
 
 var BASES = {
   android: 'res',
-  ios: 'One/Resources'
+  ios: 'ZebraIonic/Resources'
 };
 var RESOURCE_DIR = 'resources';
 

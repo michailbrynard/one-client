@@ -1,56 +1,246 @@
+/*global angular, console, window */
+
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+    .controller('CityCtrl', function ($scope, $state) {
+        'use strict';
+        console.log('this!');
+        $scope.cityId = 1; //default
+        $scope.selectCity = function (cityId) {
+            $state.go('tab.ask_category', {
+                cityId: cityId
+            });
+        };
+    })
 
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+    .controller('CategoryCtrl', function ($scope, $state, $stateParams) {
+        'use strict';
+        console.log('yo');
+        $scope.cityId = $stateParams.cityId;
+        $scope.categoryId = 1; //default
+        $scope.selectCategory = function (cityId, categoryId) {
+            console.log(cityId, categoryId);
+            $state.go('tab.ask_question', {
+                cityId: cityId,
+                categoryId: categoryId
+            });
+        };
+    })
 
-  // Form data for the login modal
-  $scope.loginData = {};
+    .controller('QuestionCtrl', function ($scope, AskerQuestions, $state) {
+        'use strict';
+        $scope.createQuestion = function (question) {
+            AskerQuestions.create($scope.categoryId, $scope.cityId, question.question);
+            $state.go('tab.questions');
+        };
+    })
 
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
+    .controller('ChannelDashCtrl', function ($scope, AskerChannels, $state, $stateParams) {
+        'use strict';
+        console.log('hello!');
+        AskerChannels.query($stateParams.questionId).success(
+            function (data) {
+                $scope.channels = data.results;
+                console.log('length');
+                console.log($scope.channels.length);
+            }
+        );
+        $scope.openChat = function (channelId) {
+            console.log(channelId);
+            $state.go('tab.chat', {
+                channelId: channelId
+            });
+        };
+    })
 
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
+    .controller('QuestionDashCtrl', function ($scope, AskerQuestions, $state) {
+        'use strict';
+        AskerQuestions.query().success(
+            function (data) {
+                $scope.questions = data.results;
+                console.log('length');
+                console.log($scope.questions.length);
+            }
+        );
+        $scope.openChannels = function (questionId) {
+            console.log(questionId);
+            $state.go('tab.channels', {
+                questionId: questionId
+            });
+        };
+    })
 
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
+    .controller('ExpertQuestionDashCtrl', function ($scope, Auth, ExpertQuestions, ChannelsSocket, $state, $interval, REFRESH_INTERVAL) {
+        'use strict';
+        console.log('expertQ');
+        var refreshData = function () {
+            ExpertQuestions.query().success(
+                function (data) {
+                    $scope.questions = data.results;
+                    console.log('questions');
+                    console.log($scope.questions);
+                }
+            );
+        };
 
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
+        var promise;
 
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
-})
+        $scope.$on('$ionicView.afterEnter', function () { // $scope.$on('$destroy'
+            console.log('ENTER');
+            promise = $interval(refreshData, REFRESH_INTERVAL);
+        });
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
+        // Cancel interval view change
+        $scope.$on('$ionicView.leave', function () {
+            console.log('LEAVE');
+            if (angular.isDefined(promise)) {
+                $interval.cancel(promise);
+                promise = undefined;
+            }
+        });
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+        $scope.$on('$destroy', function () {
+            console.log('LEAVE');
+            if (angular.isDefined(promise)) {
+                $interval.cancel(promise);
+                promise = undefined;
+            }
+        });
+
+        $scope.openChannel = function (question) {
+            console.log('uni_channel_id: ' + question.channel_info);
+            if (question.channel_info === null) {
+                $scope.createChannel(question).then(function (channelId) {
+                    console.log('cID');
+                    console.log(channelId);
+                    $state.go('tab.expert-chat', {
+                        questionId: question.id,
+                        channelId: channelId,
+                        newChannel: true,
+                        asker: question.user_info.id
+                    });
+                });
+            } else {
+                var channelId = question.channel_info.uni_channel_id;
+                $state.go('tab.expert-chat', {
+                    questionId: question.id,
+                    channelId: channelId,
+                    newChannel: true,
+                    asker: question.user_info.id
+                });
+            }
+        };
+        $scope.createChannel = function (question) {
+            var channelId = ChannelsSocket.create(question);
+            console.log('xxx');
+            console.log(channelId);
+            return channelId;
+        };
+    })
+
+    .controller('LoginCtrl', function ($scope, $ionicModal, $state, $ionicLoading, $rootScope, User) {
+        //console.log('Login Controller Initialized');
+        'use strict';
+
+        $ionicModal.fromTemplateUrl('templates/signup.html', {
+            scope: $scope
+        }).then(function (modal) {
+            $scope.modal = modal;
+        });
+
+        $scope.registerUser = function (user) {
+            console.log('Create User Function called');
+            if (user && user.first_name && user.email && user.password1 && user.password2) {
+                $ionicLoading.show({
+                    template: 'Signing Up...'
+                });
+
+                User.register(user.first_name, user.email, user.password1, user.password2)
+                    .then(function (res) {
+                        console.log(res.status);
+                        if (res.status === 201) {
+                            window.alert('User created successfully!');
+                        } else {
+                            window.alert('Error: ' + res.message);
+                        }
+
+                        $ionicLoading.hide();
+                        $scope.modal.hide();
+                    }).catch(function (error) {
+                        window.alert('Error: ' + error);
+                        $ionicLoading.hide();
+                    });
+            } else {
+                window.alert('Please fill all details');
+            }
+        };
+
+        $scope.logIn = function (user) {
+
+            if (user && user.email && user.password) {
+                $ionicLoading.show({
+                    template: 'Signing In...'
+                });
+                User.login(user.email, user.password).then(function (res) {
+                    console.log(res.status);
+                    $ionicLoading.hide();
+                    $state.go('tab.questions');
+                }).catch(function (error) {
+                    window.alert('Authentication failed:' + error.message);
+                    $ionicLoading.hide();
+                });
+            } else {
+                window.alert('Please enter both email and password');
+            }
+        };
+    })
+
+    .controller('AccountCtrl', function ($scope) {
+        'use strict';
+        $scope.settings = {
+            enableFriends: true
+        };
+    })
+
+    .controller('ChatCtrl', function ($scope, MessagesSocket, ExpertQuestions, User, $stateParams) {
+        'use strict';
+        console.log('Chat Controller initialized');
+
+        $scope.IM = {
+            textMessage: ''
+        };
+
+        console.log($stateParams.channelId);
+
+        MessagesSocket.initialize($stateParams.channelId);
+
+        var channelName = 'Chat';
+
+        // Fetching Chat Records only if a Room is Selected
+        if (channelName) {
+            $scope.channelName = ' - ' + channelName;
+            $scope.chats = MessagesSocket.query();
+        }
+
+        $scope.sendMessage = function (msg) {
+            console.log(msg);
+            console.log($scope.displayName);
+            //if it is a new channel, save to django api:
+            var expert = User.getCurrent();
+            console.log(expert.id);
+            if ($stateParams.newChannel) {
+                ExpertQuestions.create($stateParams.questionId,
+                    $stateParams.channelId,
+                    msg,
+                    expert.id,
+                    $stateParams.asker);
+                $stateParams.newChannel = false;
+            }
+            MessagesSocket.create({'displayName': expert.first_name}, msg);
+            $scope.IM.textMessage = '';
+        };
+
+        $scope.remove = function (chat) {
+            MessagesSocket.remove(chat);
+        };
+    });
