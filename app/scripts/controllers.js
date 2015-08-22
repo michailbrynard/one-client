@@ -58,7 +58,7 @@ angular.module('starter.controllers', [])
             }
         };
     })
-    .controller('CameraUpload', function($scope, Camera, User){
+    .controller('CameraUpload', function($scope, FileTransfer, Camera, User){
         'use strict';
       // open PhotoLibrary
       $scope.openPhotoLibrary = function() {
@@ -73,8 +73,8 @@ angular.module('starter.controllers', [])
           //     popoverOptions: CameraPopoverOptions,
           //     saveToPhotoAlbum: false
           // };
-          Camera.getPicture().then(function(imageURI) {
-              alert(imageURI);
+          Camera.getPicture().then(function(imagePath) {
+              alert(imagePath);
 
               var date = new Date();
 
