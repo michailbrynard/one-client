@@ -20,6 +20,7 @@ angular.module('starter.services', ['firebase'])
                     if (res.config.url.indexOf(API) === 0 && res.data.results.token) {
                         console.log('here');
                         Auth.saveToken(res.data.results.token);
+                        //TODO: save user:
                         Auth.saveUser(res.data.results.user_info);
                     }
                 }
@@ -56,7 +57,7 @@ angular.module('starter.services', ['firebase'])
 
           return q.promise;
         }
-        }
+        };
     }])
 
     .service('Auth', function ($window) {
@@ -168,6 +169,26 @@ angular.module('starter.services', ['firebase'])
 
         self.query = function () {
             return $http.get(API + '/cities/');
+        };
+
+    })
+
+    .service('ListGroups', function ($http, API) {
+        'use strict';
+        var self = this;
+
+        self.query = function () {
+            return $http.get(API + '/groups/');
+        };
+
+    })
+
+    .service('GetImages', function ($http, API) {
+        'use strict';
+        var self = this;
+
+        self.query = function ($groupId) {
+            return $http.get(API + '/groups/' + $groupId);
         };
 
     })

@@ -84,6 +84,25 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 's
                         templateUrl: 'templates/dashboard.html',
                     }
                 }
+            })
+
+            .state('tab.group', {
+                url: '/group',
+                views: {
+                    'tab-group': {
+                        templateUrl: 'templates/group.html',
+                        controller: 'GroupListing'
+                    }
+                }
+            })
+
+            .state('group', {
+                url: '/group',
+                templateUrl: 'templates/group_view.html',
+                controller: 'GroupView',
+                params: {
+                    groupId: null
+                }
             });
 
         // if none of the above states are matched, use this as the fallback

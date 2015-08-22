@@ -1,0 +1,15 @@
+<ion-view view-title="Photos">
+    <ion-content class="padding">
+        <div class="list card"  ng-repeat="item in items">
+
+          <div class="item">
+            <h2>{{item.uploader}}</h2>
+            <p>{{item.uploadedAt}}</p>
+          </div>
+
+          <div class="item item-image">
+            <img src="{{item.imageUrl}}">
+          </div>
+        </div>
+    </ion-content>
+</ion-view>
