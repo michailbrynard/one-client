@@ -58,7 +58,7 @@ angular.module('starter.controllers', [])
             }
         };
     })
-    .controller('CameraUpload', function($scope, $ionicModal, $state, $ionicLoading, $rootScope, User){
+    .controller('CameraUpload', function($scope, Camera, $ionicModal, $state, $ionicLoading, $rootScope, User){
         'use strict';
       // open PhotoLibrary
       $scope.openPhotoLibrary = function() {
