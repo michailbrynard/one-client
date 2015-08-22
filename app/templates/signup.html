@@ -6,20 +6,16 @@
     <ion-content class="padding">
         <div class="list">
             <label class="item item-input">
-                <span class="input-label">First Name</span>
-                <input ng-model="user.first_name" type="text">
+                <input ng-model="user.first_name" type="text" placeholder="First Name">
             </label>
             <label class="item item-input">
-                <span class="input-label">Email Address</span>
-                <input ng-model="user.email" type="text">
+                <input ng-model="user.email" type="text" placeholder="Email Address">
             </label>
             <label class="item item-input">
-                <span class="input-label">Password</span>
-                <input ng-model="user.password1" type="password">
+                <input ng-model="user.password1" type="password" placeholder="Password">
             </label>
             <label class="item item-input">
-                <span class="input-label">Retype Password</span>
-                <input ng-model="user.password2" type="password">
+                <input ng-model="user.password2" type="password" placeholder="Retype Password">
             </label>
             <button class="button button-full button-positive" ng-click="registerUser(user)">Create</button>
         </div>
