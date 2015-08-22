@@ -67,11 +67,20 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'starter.contro
                 cache: false
             })
 
-            .state('tab.ask_city', {
-                url: '/ask_city',
+            .state('tab.camera', {
+                url: '/camera',
                 views: {
-                    'tab-ask': {
-                        templateUrl: 'templates/city.html',
+                    'tab-camera': {
+                        templateUrl: 'templates/camera.html',
+                    }
+                }
+            })
+
+            .state('tab.dashboard', {
+                url: '/dash',
+                views: {
+                    'tab-dash': {
+                        templateUrl: 'templates/dashboard.html',
                     }
                 }
             });
