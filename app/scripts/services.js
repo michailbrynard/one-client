@@ -21,7 +21,7 @@ angular.module('starter.services', ['firebase'])
                         console.log('here');
                         Auth.saveToken(res.data.results.token);
                         //TODO: save user:
-                        Auth.saveUser({'first_name': 'Michail', 'email': 'mbrynard@gmail.com', 'id': '1'});
+                        Auth.saveUser(res.data.results.user_info);
                     }
                 }
 
@@ -99,8 +99,7 @@ angular.module('starter.services', ['firebase'])
             })
                 .then(function (res) {
                     Auth.saveToken(res.data.token);
-                    //TODO: save user
-                    Auth.saveUser({'first_name': 'Michail', 'email': 'mbrynard@gmail.com', 'id': '1'});
+                    Auth.saveUser(res.data.results.user_info);
                     return res;
                 });
         };

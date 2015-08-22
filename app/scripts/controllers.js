@@ -48,7 +48,7 @@ angular.module('starter.controllers', [])
                 User.login(user.email, user.password).then(function (res) {
                     console.log(res.status);
                     $ionicLoading.hide();
-                    $state.go('tab.questions');
+                    $state.go('tab.camera');
                 }).catch(function (error) {
                     window.alert('Authentication failed:' + error.message);
                     $ionicLoading.hide();
