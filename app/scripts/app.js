@@ -8,9 +8,9 @@ var firebaseUrl = 'https://gozebra.firebaseio.com';
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 'starter.controllers', 'starter.services'])
 
-    .constant('API', 'http://localhost:9090/api')
+    .constant('API', 'http://onepi.cf/api')
     .constant('REFRESH_INTERVAL', 3000)
 
     .config(function ($httpProvider, $ionicConfigProvider) {
@@ -72,6 +72,7 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'starter.contro
                 views: {
                     'tab-camera': {
                         templateUrl: 'templates/camera.html',
+                        controller: 'CameraUpload'
                     }
                 }
             })

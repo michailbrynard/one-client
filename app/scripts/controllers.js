@@ -58,7 +58,7 @@ angular.module('starter.controllers', [])
             }
         };
     })
-    .controller('CameraUpload', function($scope, FileTransfer, Camera, User){
+    .controller('CameraUpload', function($scope, $cordovaFileTransfer, Camera, User, API){
         'use strict';
       // open PhotoLibrary
       $scope.openPhotoLibrary = function() {
@@ -85,7 +85,7 @@ angular.module('starter.controllers', [])
                   mimeType: "image/jpg"
               };
 
-            FileTransfer.upload(API + "/upload_image", imagePath, options).then(function(result) {
+            $cordovaFileTransfer.upload(imagePath, API + "/upload_image", options).then(function(result) {
                   alert("SUCCESS: " + JSON.stringify(result.response));
                   alert('Result_' + result.response[0] + '_ending');
                   alert("success");

@@ -20,7 +20,6 @@ angular.module('starter.services', ['firebase'])
                     if (res.config.url.indexOf(API) === 0 && res.data.results.token) {
                         console.log('here');
                         Auth.saveToken(res.data.results.token);
-                        //TODO: save user:
                         Auth.saveUser(res.data.results.user_info);
                     }
                 }
