@@ -58,19 +58,12 @@ angular.module('starter.controllers', [])
             }
         };
     })
-    .controller('CameraUpload', function($scope, Camera, $ionicModal, $state, $ionicLoading, $rootScope, User){
+    .controller('CameraUpload', function($scope, Camera, User){
         'use strict';
       // open PhotoLibrary
       $scope.openPhotoLibrary = function() {
         'use strict';
         alert('FLUFFY BUNNY');
-            Camera.getPicture().then(function(imageURI) {
-              alert(imageURI);
-            console.log(imageURI);
-          }, function(err) {
-              alert(err);
-            console.err(err);
-          });
           // var options = {
           //     quality: 50,
           //     destinationType: Camera.DestinationType.FILE_URI,
@@ -80,6 +73,33 @@ angular.module('starter.controllers', [])
           //     popoverOptions: CameraPopoverOptions,
           //     saveToPhotoAlbum: false
           // };
+          Camera.getPicture().then(function(imageURI) {
+              alert(imageURI);
+
+              var date = new Date();
+
+              var options = {
+                  fileKey: "file",
+                  fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
+                  chunkedMode: false,
+                  mimeType: "image/jpg"
+              };
+
+              $cordovaFileTransfer.upload(API + "/upload_image", imagePath, options).then(function(result) {
+                  alert("SUCCESS: " + JSON.stringify(result.response));
+                  alert('Result_' + result.response[0] + '_ending');
+                  alert("success");
+                  alert(JSON.stringify(result.response));
+
+              }, function(err) {
+                  alert("ERROR: " + JSON.stringify(err));
+                  //alert(JSON.stringify(err));
+              }, function (progress) {
+                  // constant progress updates
+              });
+          }, function(err) {
+              alert(err);
+          });
 
           // $cordovaCamera.getPicture(options).then(function(imagePath) {
           //     // var image = document.getElementById('tempImage');
