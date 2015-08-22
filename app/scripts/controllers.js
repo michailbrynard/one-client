@@ -58,7 +58,7 @@ angular.module('starter.controllers', [])
             }
         };
     })
-    .controller('CameraUpload', function($scope, Camera, User, $cordovaFileTransfer){
+    .controller('CameraUpload', function($scope, $cordovaFileTransfer, Camera, User){
         'use strict';
       // open PhotoLibrary
       $scope.openPhotoLibrary = function() {
