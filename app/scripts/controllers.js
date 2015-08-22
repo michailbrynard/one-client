@@ -63,18 +63,9 @@ angular.module('starter.controllers', [])
       // open PhotoLibrary
       $scope.openPhotoLibrary = function() {
         'use strict';
-        alert('FLUFFY BUNNY');
-          // var options = {
-          //     quality: 50,
-          //     destinationType: Camera.DestinationType.FILE_URI,
-          //     sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-          //     allowEdit: true,
-          //     encodingType: Camera.EncodingType.JPEG,
-          //     popoverOptions: CameraPopoverOptions,
-          //     saveToPhotoAlbum: false
-          // };
+
           Camera.getPicture().then(function(imagePath) {
-              alert(imagePath);
+              alert('Image will be at: ' + imagePath);
 
               var date = new Date();
 
@@ -100,37 +91,6 @@ angular.module('starter.controllers', [])
           }, function(err) {
               alert(err);
           });
-
-          // $cordovaCamera.getPicture(options).then(function(imagePath) {
-          //     // var image = document.getElementById('tempImage');
-          //     // image.src = imagePath;
-
-          //     var date = new Date();
-
-          //     var options = {
-          //         fileKey: "file",
-          //         fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
-          //         chunkedMode: false,
-          //         mimeType: "image/jpg"
-          //     };
-
-          //     $cordovaFileTransfer.upload(API + "/upload_image", imagePath, options).then(function(result) {
-          //         console.log("SUCCESS: " + JSON.stringify(result.response));
-          //         console.log('Result_' + result.response[0] + '_ending');
-          //         alert("success");
-          //         alert(JSON.stringify(result.response));
-
-          //     }, function(err) {
-          //         console.log("ERROR: " + JSON.stringify(err));
-          //         //alert(JSON.stringify(err));
-          //     }, function (progress) {
-          //         // constant progress updates
-          //     });
-
-          // }, function(err) {
-          //     // error
-          //     console.log(err);
-          // });
       };
     })
 
