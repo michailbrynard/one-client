@@ -59,8 +59,11 @@ angular.module('starter.controllers', [])
         };
     })
     .controller('CameraUpload', function($scope, $ionicModal, $state, $ionicLoading, $rootScope, User){
+        'use strict';
       // open PhotoLibrary
       $scope.openPhotoLibrary = function() {
+        'use strict';
+        alert('FLUFFY BUNNY');
           var options = {
               quality: 50,
               destinationType: Camera.DestinationType.FILE_URI,
