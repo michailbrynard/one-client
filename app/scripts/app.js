@@ -72,7 +72,6 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'starter.contro
                 views: {
                     'tab-ask': {
                         templateUrl: 'templates/city.html',
-                        controller: 'CityCtrl'
                     }
                 }
             });

@@ -27,7 +27,7 @@ angular.module('starter.services', ['firebase'])
 
                 return res;
             },
-
+            /*
             //Redirect to login if unauthorised
             responseError: function (res) {
                 console.log(res.status);
@@ -38,6 +38,7 @@ angular.module('starter.services', ['firebase'])
 
                 return res;
             }
+            */
         };
     })
 

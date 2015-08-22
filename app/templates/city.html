@@ -1,0 +1,16 @@
+<ion-view view-title="Pick a City">
+    <ion-content class="padding">
+        <label class="item item-select">
+            <div class="input-label">
+                Pick a City
+            </div>
+            <select ng-model="cityId">
+                <option value="1" selected="selected">Cape Town</option>
+                <option value="2">New York</option>
+            </select>
+        </label>
+        <button ng-click="selectCity(cityId)" class="button button-block button-positive">
+            Next
+        </button>
+    </ion-content>
+</ion-view>
