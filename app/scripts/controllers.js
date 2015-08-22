@@ -58,94 +58,96 @@ angular.module('starter.controllers', [])
             }
         };
     })
-    .controller('CameraUpload', function($scope, $cordovaFileTransfer, Camera, User, API){
+    .controller('CameraCtrl', function ($scope, $state, $cordovaFileTransfer, Camera, User, Auth, API) {
         'use strict';
-      // open PhotoLibrary
-      $scope.openPhotoLibrary = function() {
+        if (!Auth.isAuthed()) {
+            $state.go('login');
+        }
+        // open PhotoLibrary
+        $scope.openPhotoLibrary = function () {
+            'use strict';
+
+            Camera.getPicture().then(function (imagePath) {
+                alert('Image will be at: ' + imagePath);
+
+                var date = new Date();
+
+                var options = {
+                    fileKey: "file",
+                    fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
+                    chunkedMode: false,
+                    mimeType: "image/jpg"
+                };
+
+                $cordovaFileTransfer.upload(imagePath, API + "/images", options).then(function (result) {
+                    alert("SUCCESS: " + JSON.stringify(result.response));
+                    alert('Result_' + result.response[0] + '_ending');
+                    alert("success");
+                    alert(JSON.stringify(result.response));
+
+                }, function (err) {
+                    alert("ERROR: " + JSON.stringify(err));
+                    //alert(JSON.stringify(err));
+                }, function (progress) {
+                    // constant progress updates
+                });
+            }, function (err) {
+                alert(err);
+            });
+        };
+    })
+
+    .controller('GroupListingCtrl', function ($scope, $state, ListGroups) {
         'use strict';
-
-          Camera.getPicture().then(function(imagePath) {
-              alert('Image will be at: ' + imagePath);
-
-              var date = new Date();
-
-              var options = {
-                  fileKey: "file",
-                  fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
-                  chunkedMode: false,
-                  mimeType: "image/jpg"
-              };
-
-            $cordovaFileTransfer.upload(imagePath, API + "/images", options).then(function(result) {
-                  alert("SUCCESS: " + JSON.stringify(result.response));
-                  alert('Result_' + result.response[0] + '_ending');
-                  alert("success");
-                  alert(JSON.stringify(result.response));
-
-              }, function(err) {
-                  alert("ERROR: " + JSON.stringify(err));
-                  //alert(JSON.stringify(err));
-              }, function (progress) {
-                  // constant progress updates
-              });
-          }, function(err) {
-              alert(err);
-          });
-      };
+        $scope.openGroup = function (id) {
+            $state.go('tab.groupView', {
+                groupId: id
+            })
+        }
+        // $scope.items = ListGroups.query();
+        $scope.items = [
+            {id: 1, title: 'Group1'},
+            {id: 2, title: 'Group2'},
+            {id: 3, title: 'Group3'},
+            {id: 4, title: 'Group4'},
+            {id: 5, title: 'Group5'},
+            {id: 'new', title: 'Create New Group'}
+        ];
     })
 
-    .controller('GroupListing', function($scope, $state, ListGroups){
-      'use strict';
-      $scope.openGroup = function(id)
-      {
-        $state.go('tab.groupView', {
-          groupId: id
-        })
-      }
-      // $scope.items = ListGroups.query();
-      $scope.items = [
-        {id: 1, title: 'Group1'},
-        {id: 2, title: 'Group2'},
-        {id: 3, title: 'Group3'},
-        {id: 4, title: 'Group4'},
-        {id: 5, title: 'Group5'},
-        {id: 'new', title: 'Create New Group'}
-      ];
+    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, GetImages) {
+        'use strict';
+        var groupId = $stateParams.groupId;
+        if (groupId == null) {
+            $state.go('tab.group');
+            return;
+        }
+        // $rawData = GetImages.query(groupId);
+        $scope.items = [
+            {
+                uploader: 'Human Name 1',
+                uploadedAt: '00:00:59 23 August 2015',
+                imageUrl: 'http://made-in-stellenbosch.com/img/helghardt.jpg'
+            },
+            {
+                uploader: 'Human Name 2',
+                uploadedAt: '00:00:59 23 August 2015',
+                imageUrl: 'http://made-in-stellenbosch.com/img/michail.jpg'
+            },
+            {
+                uploader: 'Human Name 3',
+                uploadedAt: '00:00:59 23 August 2015',
+                imageUrl: 'http://made-in-stellenbosch.com/img/hugo.jpg'
+            },
+            {
+                uploader: 'Human Name 4',
+                uploadedAt: '00:00:59 23 August 2015',
+                imageUrl: 'http://made-in-stellenbosch.com/img/christo.jpg'
+            }
+        ];
     })
 
-    .controller('GroupView', function($scope, $stateParams, $state, GetImages){
-      'use strict';
-      var groupId = $stateParams.groupId;
-      if (groupId == null) {
-        $state.go('tab.group');
-        return;
-      }
-      // $rawData = GetImages.query(groupId);
-      $scope.items = [
-        {
-          uploader : 'Human Name 1',
-          uploadedAt : '00:00:59 23 August 2015',
-          imageUrl : 'http://made-in-stellenbosch.com/img/helghardt.jpg'
-        },
-        {
-          uploader : 'Human Name 2',
-          uploadedAt : '00:00:59 23 August 2015',
-          imageUrl : 'http://made-in-stellenbosch.com/img/michail.jpg'
-        },
-        {
-          uploader : 'Human Name 3',
-          uploadedAt : '00:00:59 23 August 2015',
-          imageUrl : 'http://made-in-stellenbosch.com/img/hugo.jpg'
-        },
-        {
-          uploader : 'Human Name 4',
-          uploadedAt : '00:00:59 23 August 2015',
-          imageUrl : 'http://made-in-stellenbosch.com/img/christo.jpg'
-        },
-      ];
-    })
-
-    .controller('MyPhotos', function ($scope, API) {
+    .controller('MyPhotosCtrl', function ($scope, API) {
         'use strict';
         $scope.images = [
             {

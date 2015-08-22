@@ -10,7 +10,7 @@ var firebaseUrl = 'https://gozebra.firebaseio.com';
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 'starter.controllers', 'starter.services'])
 
-    .constant('API', 'http://onepi.cf/api:8000')
+    .constant('API', 'http://onepi.cf:8000/api')
     .constant('REFRESH_INTERVAL', 3000)
 
     .config(function ($httpProvider, $ionicConfigProvider) {
@@ -72,7 +72,7 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 's
                 views: {
                     'tab-camera': {
                         templateUrl: 'templates/camera.html',
-                        controller: 'CameraUpload'
+                        controller: 'CameraCtrl'
                     }
                 }
             })
@@ -82,7 +82,7 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 's
                 views: {
                     'tab-dash': {
                         templateUrl: 'templates/dashboard.html',
-                        controller: 'MyPhotos'
+                        controller: 'MyPhotosCtrl'
                     }
                 }
             })
@@ -92,7 +92,7 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 's
                 views: {
                     'tab-group': {
                         templateUrl: 'templates/group.html',
-                        controller: 'GroupListing'
+                        controller: 'GroupListingCtrl'
                     }
                 }
             })
@@ -102,7 +102,7 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 's
                 views: {
                     'tab-group': {
                         templateUrl: 'templates/group_view.html',
-                        controller: 'GroupView'
+                        controller: 'GroupViewCtrl'
                     }
                 },
                 params: {
@@ -111,6 +111,6 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 's
             });
 
         // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('/tab/camera');
 
     });
