@@ -10,7 +10,7 @@ var firebaseUrl = 'https://gozebra.firebaseio.com';
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 'starter.controllers', 'starter.services'])
 
-    .constant('API', 'http://onepi.cf/api')
+    .constant('API', 'http://onepi.cf/api:8000')
     .constant('REFRESH_INTERVAL', 3000)
 
     .config(function ($httpProvider, $ionicConfigProvider) {
@@ -82,6 +82,7 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 's
                 views: {
                     'tab-dash': {
                         templateUrl: 'templates/dashboard.html',
+                        controller: 'MyPhotos'
                     }
                 }
             })
@@ -96,10 +97,14 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 's
                 }
             })
 
-            .state('group', {
-                url: '/group',
-                templateUrl: 'templates/group_view.html',
-                controller: 'GroupView',
+            .state('tab.groupView', {
+                url: '/group/view',
+                views: {
+                    'tab-group': {
+                        templateUrl: 'templates/group_view.html',
+                        controller: 'GroupView'
+                    }
+                },
                 params: {
                     groupId: null
                 }

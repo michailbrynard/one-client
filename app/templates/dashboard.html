@@ -1,11 +1,19 @@
 <ion-view view-title="Photos">
     <ion-content class="padding">
-        <div class="list card">
-
-            <div class="item item-image">
-                <img src="http://made-in-stellenbosch.com/img/helghardt.jpg">
+        <ion-list ng-if="images.length">
+            <div class="list card" ng-repeat="image in images">
+                <div class="item item-image">
+                    <img src="{{ image.url }}">
+                </div>
+                <div class="item">
+                    <p>{{ image.timestamp }}</p>
+                </div>
             </div>
-
-        </div>
+        </ion-list>
+        <ion-list ng-if="!images.length">
+            <ion-item class="textCenter">
+                <i class="icon ion-loading-c"></i> Loading Photos
+            </ion-item>
+        </ion-list>
     </ion-content>
 </ion-view>

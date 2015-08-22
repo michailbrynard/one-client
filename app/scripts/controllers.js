@@ -85,7 +85,7 @@ angular.module('starter.controllers', [])
                   mimeType: "image/jpg"
               };
 
-            $cordovaFileTransfer.upload(imagePath, API + "/upload_image", options).then(function(result) {
+            $cordovaFileTransfer.upload(imagePath, API + "/images", options).then(function(result) {
                   alert("SUCCESS: " + JSON.stringify(result.response));
                   alert('Result_' + result.response[0] + '_ending');
                   alert("success");
@@ -138,7 +138,7 @@ angular.module('starter.controllers', [])
       'use strict';
       $scope.openGroup = function(id)
       {
-        $state.go('group', {
+        $state.go('tab.groupView', {
           groupId: id
         })
       }
@@ -183,4 +183,19 @@ angular.module('starter.controllers', [])
           imageUrl : 'http://made-in-stellenbosch.com/img/christo.jpg'
         },
       ];
+    })
+
+    .controller('MyPhotos', function ($scope, API) {
+        'use strict';
+        $scope.images = [
+            {
+                url: 'http://made-in-stellenbosch.com/img/helghardt.jpg',
+                timestamp: '00:00:59 23 August 2015'
+            },
+            {
+                url: 'http://made-in-stellenbosch.com/img/louw.jpg',
+                timestamp: '00:00:59 23 August 2015'
+            }
+        ];
+        console.log($scope.images);
     });

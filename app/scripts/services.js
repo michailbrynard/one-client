@@ -20,7 +20,6 @@ angular.module('starter.services', ['firebase'])
                     if (res.config.url.indexOf(API) === 0 && res.data.results.token) {
                         console.log('here');
                         Auth.saveToken(res.data.results.token);
-                        //TODO: save user:
                         Auth.saveUser(res.data.results.user_info);
                     }
                 }
@@ -134,16 +133,16 @@ angular.module('starter.services', ['firebase'])
         };
     })
 
-    .service('AskerQuestions', function ($http, API) {
+    .service('Images', function ($http, API) {
         'use strict';
         var self = this;
 
         self.query = function () {
-            return $http.get(API + '/asker/questions/');
+            return $http.get(API + '/images/');
         };
 
-        self.get = function (questionId) {
-            return $http.get(API + '/asker/questions/' + questionId + '/');
+        self.get = function (groupId) {
+            return $http.get(API + '/images/' + groupId + '/');
         };
 
         self.save = function (questionId, question) {
