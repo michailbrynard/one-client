@@ -193,6 +193,8 @@ angular.module('starter.controllers', [])
             );
         };
 
+        refreshData();
+
         var promise;
 
         $scope.$on('$ionicView.afterEnter', function () { // $scope.$on('$destroy'
