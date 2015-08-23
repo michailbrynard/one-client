@@ -57,7 +57,7 @@ angular.module('starter.controllers', [])
             }
         };
     })
-    .controller('CameraCtrl', function ($scope, $state, $cordovaFileTransfer, Camera, User, Auth, API) {
+    .controller('CameraCtrl', function ($scope, $state, $cordovaFileTransfer, $ionicLoading, Camera, User, Auth, API) {
         'use strict';
         if (!Auth.isAuthed()) {
             $state.go('login');
@@ -70,18 +70,20 @@ angular.module('starter.controllers', [])
 
                 Camera.getPicture().then(function (imagePath) {
                     alert('Image will be at: ' + imagePath);
-
-                    var date = new Date();
+                    $ionicLoading.show({
+                        template: 'Uploading...'
+                    });
 
                     var options = {
-                        fileKey: 'file',
+                        fileKey: 'image',
                         fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
-                        chunkedMode: false,
+                        chunkedMode: true,
                         mimeType: 'image/jpg',
                         headers: {'Authorization': 'JWT ' + Auth.getToken()}
                     };
 
                     $cordovaFileTransfer.upload(API + '/image/', imagePath, options).then(function (result) {
+                        $ionicLoading.hide();
                         alert('SUCCESS: ' + JSON.stringify(result));
                         alert('Result_' + result.response[0] + '_ending');
                         alert('success');
@@ -89,6 +91,7 @@ angular.module('starter.controllers', [])
 
                     }, function (err) {
                         alert('ERROR: ' + JSON.stringify(err));
+                        $ionicLoading.hide();
                         //alert(JSON.stringify(err));
                     }, function (progress) {
                         // constant progress updates
@@ -166,7 +169,7 @@ angular.module('starter.controllers', [])
               $ionicLoading.show({
                   template: 'Adding Person...'
               });
-              Group.addUser(groupId, email).then(function() {
+              Groups.addUser(groupId, email).then(function() {
 
                   $ionicLoading.hide();
                   $scope.modal.hide();

@@ -66,8 +66,9 @@
     {
       "locator": "https://github.com/apache/cordova-plugin-camera",
       "id": "cordova-plugin-camera"
-    }
-
+    },
+    "cordova-plugin-file-transfer",
+    "cordova-plugin-file-transfer"
   ],
   "cordovaPlatforms": []
 }
