@@ -7,7 +7,8 @@ angular.module('starter.services', ['firebase'])
             // automatically attach Authorization header
             request: function (config) {
                 var token = Auth.getToken();
-                if (config.url.indexOf(API) === 0 && token) {
+
+                if (token && config.url.indexOf(API) === 0 && token) {
                     config.headers.Authorization = 'JWT ' + token;
                 }
 
@@ -18,7 +19,6 @@ angular.module('starter.services', ['firebase'])
             response: function (res) {
                 if (res.data.results) {
                     if (res.config.url.indexOf(API) === 0 && res.data.results.token) {
-                        console.log('here');
                         Auth.saveToken(res.data.results.token);
                         Auth.saveUser(res.data.results.user_info);
                     }
@@ -28,7 +28,7 @@ angular.module('starter.services', ['firebase'])
             },
             //Redirect to login if unauthorised
             responseError: function (res) {
-                console.log(res.status);
+                window.alert('Code: ' + res.status);
                 if (res.status === 401) {
                     console.log('unauthorized');
                     $location.path('/login');

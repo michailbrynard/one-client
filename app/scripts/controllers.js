@@ -1,8 +1,8 @@
-/*global angular, console, window, alert */
+/*global angular, console, window */
 
 angular.module('starter.controllers', [])
 
-    .controller('LoginCtrl', function ($scope, $ionicModal, $state, $ionicLoading, $rootScope, User) {
+    .controller('LoginCtrl', function ($scope, $ionicModal, $state, $ionicLoading, $rootScope, User, $http, API) {
         //console.log('Login Controller Initialized');
         'use strict';
 
@@ -13,7 +13,7 @@ angular.module('starter.controllers', [])
         });
 
         $scope.registerUser = function (user) {
-            console.log('Create User Function called');
+            window.alert('Create User Function called');
             if (user && user.first_name && user.email && user.password1 && user.password2) {
                 $ionicLoading.show({
                     template: 'Signing Up...'
@@ -40,13 +40,12 @@ angular.module('starter.controllers', [])
         };
 
         $scope.logIn = function (user) {
-
             if (user && user.email && user.password) {
                 $ionicLoading.show({
                     template: 'Signing In...'
                 });
                 User.login(user.email, user.password).then(function (res) {
-                    console.log(res.status);
+                    window.alert('Login Success: ' + JSON.stringify(res.data));
                     $ionicLoading.hide();
                     $state.go('tab.camera');
                 }).catch(function (error) {
@@ -73,20 +72,20 @@ angular.module('starter.controllers', [])
                 var date = new Date();
 
                 var options = {
-                    fileKey: 'file',
+                    fileKey: "file",
                     fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
                     chunkedMode: false,
-                    mimeType: 'image/jpg'
+                    mimeType: "image/jpg"
                 };
 
-                $cordovaFileTransfer.upload(imagePath, API + '/images', options).then(function (result) {
-                    alert('SUCCESS: ' + JSON.stringify(result.response));
+                $cordovaFileTransfer.upload(imagePath, API + "/images", options).then(function (result) {
+                    alert("SUCCESS: " + JSON.stringify(result.response));
                     alert('Result_' + result.response[0] + '_ending');
-                    alert('success');
+                    alert("success");
                     alert(JSON.stringify(result.response));
 
                 }, function (err) {
-                    alert('ERROR: ' + JSON.stringify(err));
+                    alert("ERROR: " + JSON.stringify(err));
                     //alert(JSON.stringify(err));
                 }, function (progress) {
                     // constant progress updates
@@ -137,8 +136,15 @@ angular.module('starter.controllers', [])
             }
         };
 
-        var rawData = Groups.list().then(function(rawData){
+        Groups.list().then(function(rawData){
+          console.log(JSON.stringify(rawData));
+          $scope.items = [];
           for (var i = 0; i < rawData.data.results.length; i++) {
+            $scope.items.push = {
+              'id': rawData.data.results[i].group.id,
+              'title': rawData.data.results[i].group.group_name,
+              'last_upload': rawData.data.results[i].last_upload
+            }
             console.log(i);
           };
           $scope.items = [
@@ -213,43 +219,17 @@ angular.module('starter.controllers', [])
       ];
     })
 
-    .controller('MyPhotosCtrl', function ($scope, Images, REFRESH_INTERVAL, $interval) {
+    .controller('MyPhotosCtrl', function ($scope, API) {
         'use strict';
-
-        var refreshData = function () {
-            Images.query().success(
-                function (data) {
-                    $scope.images = data.results;
-                    console.log('images');
-                    console.log($scope.images);
-                }
-            );
-        };
-
-        refreshData();
-
-        var promise;
-
-        $scope.$on('$ionicView.afterEnter', function () { // $scope.$on('$destroy'
-            console.log('ENTER');
-            promise = $interval(refreshData, REFRESH_INTERVAL);
-        });
-
-        // Cancel interval view change
-        $scope.$on('$ionicView.leave', function () {
-            console.log('LEAVE');
-            if (angular.isDefined(promise)) {
-                $interval.cancel(promise);
-                promise = undefined;
+        $scope.images = [
+            {
+                url: 'http://made-in-stellenbosch.com/img/helghardt.jpg',
+                timestamp: '00:00:59 23 August 2015'
+            },
+            {
+                url: 'http://made-in-stellenbosch.com/img/louw.jpg',
+                timestamp: '00:00:59 23 August 2015'
             }
-        });
-
-        $scope.$on('$destroy', function () {
-            console.log('LEAVE');
-            if (angular.isDefined(promise)) {
-                $interval.cancel(promise);
-                promise = undefined;
-            }
-        });
-
+        ];
+        console.log($scope.images);
     });

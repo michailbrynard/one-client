@@ -10,6 +10,9 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
+    <access origin="*" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' onepi.cf" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' made-in-stellenbosch.com" />
     <platform name="android">
         <preference name="AndroidLaunchMode" value="singleTop"/>
         <preference name="android-minSdkVersion" value="19" />

@@ -6,7 +6,8 @@
                href=""
                ng-click="openGroup(item.id)"
                class="item">
-               {{item.title}}
+               <h2>{{item.title}}</h2>
+               <p>{{item.last_upload}}</p>
             </a>
         <button ng-click="modal.show()"
                 class="button button-full button-balanced icon-left ion-person-add">
