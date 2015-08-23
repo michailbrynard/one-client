@@ -216,17 +216,47 @@ angular.module('starter.controllers', [])
       ];
     })
 
-    .controller('MyPhotosCtrl', function ($scope, API) {
+    .controller('MyPhotosCtrl', function ($scope, Images) {
         'use strict';
-        $scope.images = [
-            {
-                url: 'http://made-in-stellenbosch.com/img/helghardt.jpg',
-                timestamp: '00:00:59 23 August 2015'
-            },
-            {
-                url: 'http://made-in-stellenbosch.com/img/louw.jpg',
-                timestamp: '00:00:59 23 August 2015'
+
+        var refreshData = function () {
+            Images.query().success(
+                function (data) {
+                    $scope.images = data.results;
+                    console.log('images');
+                    console.log($scope.images);
+                }
+            );
+        };
+
+        $scope.$on('$ionicView.afterEnter', function () { // $scope.$on('$destroy'
+            console.log('ENTER');
+            refreshData();
+        });
+
+        // Polling functions
+        /*
+        var promise;
+        $scope.$on('$ionicView.afterEnter', function () { // $scope.$on('$destroy'
+            console.log('ENTER');
+            promise = $interval(refreshData, REFRESH_INTERVAL);
+        });
+
+        // Cancel interval view change
+        $scope.$on('$ionicView.leave', function () {
+            console.log('LEAVE');
+            if (angular.isDefined(promise)) {
+                $interval.cancel(promise);
+                promise = undefined;
             }
-        ];
-        console.log($scope.images);
+        });
+
+        $scope.$on('$destroy', function () {
+            console.log('LEAVE');
+            if (angular.isDefined(promise)) {
+                $interval.cancel(promise);
+                promise = undefined;
+            }
+        });
+        */
     });
