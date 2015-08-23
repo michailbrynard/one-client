@@ -113,13 +113,46 @@ angular.module('starter.controllers', [])
       ];
     })
 
-    .controller('GroupView', function($scope, $stateParams, $state, GetImages){
+    .controller('GroupView', function($scope, $stateParams, $state, $ionicLoading, $ionicModal, GetImages){
       'use strict';
       var groupId = $stateParams.groupId;
       if (groupId == null) {
         $state.go('tab.group');
         return;
       }
+
+      $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
+          scope: $scope
+      }).then(function (modal) {
+          $scope.modal = modal;
+      });
+
+      $scope.addUser = function (email) {
+          console.log('Create User Function called');
+          if (email) {
+              $ionicLoading.show({
+                  template: 'Adding Person...'
+              });
+
+              // User.register(user.first_name, user.email, user.password1, user.password2)
+              //     .then(function (res) {
+              //         console.log(res.status);
+              //         if (res.status === 201) {
+              //             window.alert('User added successfully!');
+              //         } else {
+              //             window.alert('Error: ' + res.message);
+              //         }
+
+              //         $ionicLoading.hide();
+              //         $scope.modal.hide();
+              //     }).catch(function (error) {
+              //         window.alert('Error: ' + error);
+                      $ionicLoading.hide();
+              //     });
+          } else {
+              window.alert('Please fill all details');
+          }
+      };
       // $rawData = GetImages.query(groupId);
       $scope.items = [
         {
