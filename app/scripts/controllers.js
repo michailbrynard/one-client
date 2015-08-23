@@ -58,62 +58,64 @@ angular.module('starter.controllers', [])
             }
         };
     })
-    .controller('CameraUpload', function($scope, $cordovaFileTransfer, Camera, User, API){
+    .controller('CameraCtrl', function ($scope, $state, $cordovaFileTransfer, Camera, User, Auth, API) {
         'use strict';
-      // open PhotoLibrary
-      $scope.openPhotoLibrary = function() {
-        'use strict';
+        if (!Auth.isAuthed()) {
+            $state.go('login');
+        }
+        // open PhotoLibrary
+        $scope.openPhotoLibrary = function () {
+            'use strict';
 
-          Camera.getPicture().then(function(imagePath) {
-              alert('Image will be at: ' + imagePath);
+            Camera.getPicture().then(function (imagePath) {
+                alert('Image will be at: ' + imagePath);
 
-              var date = new Date();
+                var date = new Date();
 
-              var options = {
-                  fileKey: "file",
-                  fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
-                  chunkedMode: false,
-                  mimeType: "image/jpg"
-              };
+                var options = {
+                    fileKey: "file",
+                    fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
+                    chunkedMode: false,
+                    mimeType: "image/jpg"
+                };
 
-            $cordovaFileTransfer.upload(imagePath, API + "/images", options).then(function(result) {
-                  alert("SUCCESS: " + JSON.stringify(result.response));
-                  alert('Result_' + result.response[0] + '_ending');
-                  alert("success");
-                  alert(JSON.stringify(result.response));
+                $cordovaFileTransfer.upload(imagePath, API + "/images", options).then(function (result) {
+                    alert("SUCCESS: " + JSON.stringify(result.response));
+                    alert('Result_' + result.response[0] + '_ending');
+                    alert("success");
+                    alert(JSON.stringify(result.response));
 
-              }, function(err) {
-                  alert("ERROR: " + JSON.stringify(err));
-                  //alert(JSON.stringify(err));
-              }, function (progress) {
-                  // constant progress updates
-              });
-          }, function(err) {
-              alert(err);
-          });
-      };
+                }, function (err) {
+                    alert("ERROR: " + JSON.stringify(err));
+                    //alert(JSON.stringify(err));
+                }, function (progress) {
+                    // constant progress updates
+                });
+            }, function (err) {
+                alert(err);
+            });
+        };
     })
 
-    .controller('GroupListing', function($scope, $state, ListGroups){
-      'use strict';
-      $scope.openGroup = function(id)
-      {
-        $state.go('tab.groupView', {
-          groupId: id
-        })
-      }
-      // $scope.items = ListGroups.query();
-      $scope.items = [
-        {id: 1, title: 'Group1'},
-        {id: 2, title: 'Group2'},
-        {id: 3, title: 'Group3'},
-        {id: 4, title: 'Group4'},
-        {id: 5, title: 'Group5'},
-        {id: 'new', title: 'Create New Group'}
-      ];
+    .controller('GroupListingCtrl', function ($scope, $state, ListGroups) {
+        'use strict';
+        $scope.openGroup = function (id) {
+            $state.go('tab.groupView', {
+                groupId: id
+            })
+        }
+        // $scope.items = ListGroups.query();
+        $scope.items = [
+            {id: 1, title: 'Group1'},
+            {id: 2, title: 'Group2'},
+            {id: 3, title: 'Group3'},
+            {id: 4, title: 'Group4'},
+            {id: 5, title: 'Group5'},
+            {id: 'new', title: 'Create New Group'}
+        ];
     })
 
-    .controller('GroupView', function($scope, $stateParams, $state, $ionicLoading, $ionicModal, GetImages){
+    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, GetImages){
       'use strict';
       var groupId = $stateParams.groupId;
       if (groupId == null) {
@@ -178,7 +180,7 @@ angular.module('starter.controllers', [])
       ];
     })
 
-    .controller('MyPhotos', function ($scope, API) {
+    .controller('MyPhotosCtrl', function ($scope, API) {
         'use strict';
         $scope.images = [
             {
