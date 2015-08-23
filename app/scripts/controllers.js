@@ -115,6 +115,15 @@ angular.module('starter.controllers', [])
                 $ionicLoading.show({
                     template: 'Adding Group...'
                 });
+              Group.create(name).then(function() {
+
+                  $ionicLoading.hide();
+                  $scope.modal.hide();
+                  alert('Group Added');
+              }).catch(function (error) {
+                  window.alert('Error:' + error.message);
+                  $ionicLoading.hide();
+              });
 
                 // User.register(user.first_name, user.email, user.password1, user.password2)
                 //     .then(function (res) {
