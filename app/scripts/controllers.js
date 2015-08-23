@@ -169,51 +169,56 @@ angular.module('starter.controllers', [])
               $ionicLoading.show({
                   template: 'Adding Person...'
               });
+              Group.addUser(groupId, email).then(function() {
 
-              // User.register(user.first_name, user.email, user.password1, user.password2)
-              //     .then(function (res) {
-              //         console.log(res.status);
-              //         if (res.status === 201) {
-              //             window.alert('User added successfully!');
-              //         } else {
-              //             window.alert('Error: ' + res.message);
-              //         }
-
-              //         $ionicLoading.hide();
-              //         $scope.modal.hide();
-              //     }).catch(function (error) {
-              //         window.alert('Error: ' + error);
-                      $ionicLoading.hide();
-              //     });
+                  $ionicLoading.hide();
+                  $scope.modal.hide();
+                  alert('Person Added');
+              }).catch(function (error) {
+                  window.alert('Error:' + error.message);
+                  $ionicLoading.hide();
+              });
           } else {
               window.alert('Please fill all details');
           }
       };
 
-      var rawData = Groups.getImages(groupId);
-      alert(rawData);
-      $scope.items = [
-        {
-          uploader : 'Human Name 1',
-          uploadedAt : '00:00:59 23 August 2015',
-          imageUrl : 'http://made-in-stellenbosch.com/img/helghardt.jpg'
-        },
-        {
-          uploader : 'Human Name 2',
-          uploadedAt : '00:00:59 23 August 2015',
-          imageUrl : 'http://made-in-stellenbosch.com/img/michail.jpg'
-        },
-        {
-          uploader : 'Human Name 3',
-          uploadedAt : '00:00:59 23 August 2015',
-          imageUrl : 'http://made-in-stellenbosch.com/img/hugo.jpg'
-        },
-        {
-          uploader : 'Human Name 4',
-          uploadedAt : '00:00:59 23 August 2015',
-          imageUrl : 'http://made-in-stellenbosch.com/img/christo.jpg'
-        },
-      ];
+      Groups.getImages(groupId).then(function(rawData){
+        console.log(JSON.stringify(rawData));
+          var items = [];
+          for (var i = 0; i < rawData.data.results.length; i++) {
+            items[i] = {
+              'uploader': rawData.data.results[i].user_group.user.first_name,
+              'uploadedAt': rawData.data.results[i].created_timestamp,
+              'imageUrl': rawData.data.results[i].image.image
+            }
+          };
+          $scope.items = items;
+        });
+
+      // var rawData = Groups.getImages(groupId);
+      // $scope.items = [
+      //   {
+      //     uploader : 'Human Name 1',
+      //     uploadedAt : '00:00:59 23 August 2015',
+      //     imageUrl : 'http://made-in-stellenbosch.com/img/helghardt.jpg'
+      //   },
+      //   {
+      //     uploader : 'Human Name 2',
+      //     uploadedAt : '00:00:59 23 August 2015',
+      //     imageUrl : 'http://made-in-stellenbosch.com/img/michail.jpg'
+      //   },
+      //   {
+      //     uploader : 'Human Name 3',
+      //     uploadedAt : '00:00:59 23 August 2015',
+      //     imageUrl : 'http://made-in-stellenbosch.com/img/hugo.jpg'
+      //   },
+      //   {
+      //     uploader : 'Human Name 4',
+      //     uploadedAt : '00:00:59 23 August 2015',
+      //     imageUrl : 'http://made-in-stellenbosch.com/img/christo.jpg'
+      //   },
+      // ];
     })
 
     .controller('MyPhotosCtrl', function ($scope, Images) {

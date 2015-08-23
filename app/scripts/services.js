@@ -28,7 +28,6 @@ angular.module('starter.services', ['firebase'])
             },
             //Redirect to login if unauthorised
             responseError: function (res) {
-                window.alert('Code: ' + res.status);
                 if (res.status === 401 || res.status === 403) {
                     console.log('unauthorized');
                     $location.path('/login');
@@ -187,7 +186,13 @@ angular.module('starter.services', ['firebase'])
         };
 
         self.getImages = function(id) {
-            return $http.get(API + '/groups/' + id);
+            return $http.get(API + '/images/' + id + '/');
+        }
+
+        self.addUser = function(groupId, email) {
+            return $http.post(API + '/groups/' + groupId + '/', {
+                'email': email
+            });
         }
 
     })
