@@ -124,22 +124,6 @@ angular.module('starter.controllers', [])
                   window.alert('Error:' + error.message);
                   $ionicLoading.hide();
               });
-
-                // User.register(user.first_name, user.email, user.password1, user.password2)
-                //     .then(function (res) {
-                //         console.log(res.status);
-                //         if (res.status === 201) {
-                //             window.alert('User added successfully!');
-                //         } else {
-                //             window.alert('Error: ' + res.message);
-                //         }
-
-                //         $ionicLoading.hide();
-                //         $scope.modal.hide();
-                //     }).catch(function (error) {
-                //         window.alert('Error: ' + error);
-                        $ionicLoading.hide();
-                //     });
             } else {
                 window.alert('Please fill all details');
             }
@@ -204,30 +188,6 @@ angular.module('starter.controllers', [])
           };
           $scope.items = items;
         });
-
-      // var rawData = Groups.getImages(groupId);
-      // $scope.items = [
-      //   {
-      //     uploader : 'Human Name 1',
-      //     uploadedAt : '00:00:59 23 August 2015',
-      //     imageUrl : 'http://made-in-stellenbosch.com/img/helghardt.jpg'
-      //   },
-      //   {
-      //     uploader : 'Human Name 2',
-      //     uploadedAt : '00:00:59 23 August 2015',
-      //     imageUrl : 'http://made-in-stellenbosch.com/img/michail.jpg'
-      //   },
-      //   {
-      //     uploader : 'Human Name 3',
-      //     uploadedAt : '00:00:59 23 August 2015',
-      //     imageUrl : 'http://made-in-stellenbosch.com/img/hugo.jpg'
-      //   },
-      //   {
-      //     uploader : 'Human Name 4',
-      //     uploadedAt : '00:00:59 23 August 2015',
-      //     imageUrl : 'http://made-in-stellenbosch.com/img/christo.jpg'
-      //   },
-      // ];
     })
 
     .controller('MyPhotosCtrl', function ($scope, Images) {
