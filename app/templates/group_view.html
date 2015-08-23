@@ -1,5 +1,10 @@
 <ion-view view-title="Photos">
     <ion-content class="padding">
+
+        <button ng-click="modal.show()"
+                class="button button-full button-balanced icon-left ion-person-add">
+            Add Person
+        </button>
         <div class="list card"  ng-repeat="item in items">
 
           <div class="item">
