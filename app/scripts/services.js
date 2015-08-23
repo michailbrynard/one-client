@@ -170,23 +170,25 @@ angular.module('starter.services', ['firebase'])
 
     })
 
-    .service('ListGroups', function ($http, API) {
+    .service('Groups', function($http, API){
         'use strict';
         var self = this;
 
-        self.query = function () {
-            return $http.get(API + '/groups/');
+        self.create = function(name) {
+            return $http.post(API + '/groups/', {
+                'name': name
+            });
         };
 
-    })
-
-    .service('GetImages', function ($http, API) {
-        'use strict';
-        var self = this;
-
-        self.query = function ($groupId) {
-            return $http.get(API + '/groups/' + $groupId);
+        self.list = function() {
+            return $http.get(API + '/groups/').then(function (res) {
+                    return res;
+                });
         };
+
+        self.getImages = function(id) {
+            return $http.get(API + '/groups/' + id);
+        }
 
     })
 

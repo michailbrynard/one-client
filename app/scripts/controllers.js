@@ -97,25 +97,56 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('GroupListingCtrl', function ($scope, $state, ListGroups) {
+    .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
         'use strict';
         $scope.openGroup = function (id) {
             $state.go('tab.groupView', {
                 groupId: id
             })
         }
-        // $scope.items = ListGroups.query();
-        $scope.items = [
-            {id: 1, title: 'Group1'},
-            {id: 2, title: 'Group2'},
-            {id: 3, title: 'Group3'},
-            {id: 4, title: 'Group4'},
-            {id: 5, title: 'Group5'},
-            {id: 'new', title: 'Create New Group'}
-        ];
+
+        $ionicModal.fromTemplateUrl('templates/group_create.html', {
+            scope: $scope
+        }).then(function (modal) {
+            $scope.modal = modal;
+        });
+        $scope.addGroup = function (name) {
+            console.log('Create User Function called');
+            if (name) {
+                $ionicLoading.show({
+                    template: 'Adding Group...'
+                });
+
+                // User.register(user.first_name, user.email, user.password1, user.password2)
+                //     .then(function (res) {
+                //         console.log(res.status);
+                //         if (res.status === 201) {
+                //             window.alert('User added successfully!');
+                //         } else {
+                //             window.alert('Error: ' + res.message);
+                //         }
+
+                //         $ionicLoading.hide();
+                //         $scope.modal.hide();
+                //     }).catch(function (error) {
+                //         window.alert('Error: ' + error);
+                        $ionicLoading.hide();
+                //     });
+            } else {
+                window.alert('Please fill all details');
+            }
+        };
+
+        var rawData = Groups.list().then(function(rawData){
+          for (var i = 0; i < rawData.data.results.length; i++) {
+            console.log(i);
+          };
+          $scope.items = [
+          ];
+        });
     })
 
-    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, GetImages){
+    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups){
       'use strict';
       var groupId = $stateParams.groupId;
       if (groupId == null) {
@@ -155,7 +186,9 @@ angular.module('starter.controllers', [])
               window.alert('Please fill all details');
           }
       };
-      // $rawData = GetImages.query(groupId);
+
+      var rawData = Groups.getImages(groupId);
+      alert(rawData);
       $scope.items = [
         {
           uploader : 'Human Name 1',
