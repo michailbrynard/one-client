@@ -137,18 +137,15 @@ angular.module('starter.controllers', [])
         };
 
         Groups.list().then(function(rawData){
-          console.log(JSON.stringify(rawData));
-          $scope.items = [];
+          var items = [];
           for (var i = 0; i < rawData.data.results.length; i++) {
-            $scope.items.push = {
+            items[i] = {
               'id': rawData.data.results[i].group.id,
               'title': rawData.data.results[i].group.group_name,
               'last_upload': rawData.data.results[i].last_upload
             }
-            console.log(i);
           };
-          $scope.items = [
-          ];
+          $scope.items = items;
         });
     })
 

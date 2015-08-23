@@ -29,7 +29,7 @@ angular.module('starter.services', ['firebase'])
             //Redirect to login if unauthorised
             responseError: function (res) {
                 window.alert('Code: ' + res.status);
-                if (res.status === 401) {
+                if (res.status === 401 || res.status === 403) {
                     console.log('unauthorized');
                     $location.path('/login');
                 }
