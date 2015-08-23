@@ -1,8 +1,8 @@
-/*global angular, console, window */
+/*global angular, console, window, alert */
 
 angular.module('starter.controllers', [])
 
-    .controller('LoginCtrl', function ($scope, $ionicModal, $state, $ionicLoading, $rootScope, User, $http, API) {
+    .controller('LoginCtrl', function ($scope, $ionicModal, $state, $ionicLoading, $rootScope, User) {
         //console.log('Login Controller Initialized');
         'use strict';
 
@@ -62,38 +62,42 @@ angular.module('starter.controllers', [])
         if (!Auth.isAuthed()) {
             $state.go('login');
         }
-        // open PhotoLibrary
-        $scope.openPhotoLibrary = function () {
-            'use strict';
 
-            Camera.getPicture().then(function (imagePath) {
-                alert('Image will be at: ' + imagePath);
+        document.addEventListener('deviceready', function () {
+            // open PhotoLibrary
+            $scope.openPhotoLibrary = function () {
+                'use strict';
 
-                var date = new Date();
+                Camera.getPicture().then(function (imagePath) {
+                    alert('Image will be at: ' + imagePath);
 
-                var options = {
-                    fileKey: "file",
-                    fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
-                    chunkedMode: false,
-                    mimeType: "image/jpg"
-                };
+                    var date = new Date();
 
-                $cordovaFileTransfer.upload(imagePath, API + "/images", options).then(function (result) {
-                    alert("SUCCESS: " + JSON.stringify(result.response));
-                    alert('Result_' + result.response[0] + '_ending');
-                    alert("success");
-                    alert(JSON.stringify(result.response));
+                    var options = {
+                        fileKey: 'file',
+                        fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
+                        chunkedMode: false,
+                        mimeType: 'image/jpg',
+                        headers: {'Authorization': 'JWT ' + Auth.getToken()}
+                    };
 
+                    $cordovaFileTransfer.upload(API + '/image/', imagePath, options).then(function (result) {
+                        alert('SUCCESS: ' + JSON.stringify(result));
+                        alert('Result_' + result.response[0] + '_ending');
+                        alert('success');
+                        alert(JSON.stringify(result.response));
+
+                    }, function (err) {
+                        alert('ERROR: ' + JSON.stringify(err));
+                        //alert(JSON.stringify(err));
+                    }, function (progress) {
+                        // constant progress updates
+                    });
                 }, function (err) {
-                    alert("ERROR: " + JSON.stringify(err));
-                    //alert(JSON.stringify(err));
-                }, function (progress) {
-                    // constant progress updates
+                    alert(err);
                 });
-            }, function (err) {
-                alert(err);
-            });
-        };
+            };
+        });
     })
 
     .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
@@ -101,8 +105,8 @@ angular.module('starter.controllers', [])
         $scope.openGroup = function (id) {
             $state.go('tab.groupView', {
                 groupId: id
-            })
-        }
+            });
+        };
 
         $ionicModal.fromTemplateUrl('templates/group_create.html', {
             scope: $scope
@@ -129,15 +133,15 @@ angular.module('starter.controllers', [])
             }
         };
 
-        Groups.list().then(function(rawData){
+        Groups.list().then(function (rawData){
           var items = [];
           for (var i = 0; i < rawData.data.results.length; i++) {
             items[i] = {
               'id': rawData.data.results[i].group.id,
               'title': rawData.data.results[i].group.group_name,
               'last_upload': rawData.data.results[i].last_upload
-            }
-          };
+            };
+          }
           $scope.items = items;
         });
     })
