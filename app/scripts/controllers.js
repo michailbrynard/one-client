@@ -1,4 +1,4 @@
-/*global angular, console, window */
+/*global angular, console, window, alert */
 
 angular.module('starter.controllers', [])
 
@@ -73,20 +73,20 @@ angular.module('starter.controllers', [])
                 var date = new Date();
 
                 var options = {
-                    fileKey: "file",
+                    fileKey: 'file',
                     fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
                     chunkedMode: false,
-                    mimeType: "image/jpg"
+                    mimeType: 'image/jpg'
                 };
 
-                $cordovaFileTransfer.upload(imagePath, API + "/images", options).then(function (result) {
-                    alert("SUCCESS: " + JSON.stringify(result.response));
+                $cordovaFileTransfer.upload(imagePath, API + '/images', options).then(function (result) {
+                    alert('SUCCESS: ' + JSON.stringify(result.response));
                     alert('Result_' + result.response[0] + '_ending');
-                    alert("success");
+                    alert('success');
                     alert(JSON.stringify(result.response));
 
                 }, function (err) {
-                    alert("ERROR: " + JSON.stringify(err));
+                    alert('ERROR: ' + JSON.stringify(err));
                     //alert(JSON.stringify(err));
                 }, function (progress) {
                     // constant progress updates
@@ -213,17 +213,43 @@ angular.module('starter.controllers', [])
       ];
     })
 
-    .controller('MyPhotosCtrl', function ($scope, API) {
+    .controller('MyPhotosCtrl', function ($scope, Images, REFRESH_INTERVAL, $interval) {
         'use strict';
-        $scope.images = [
-            {
-                url: 'http://made-in-stellenbosch.com/img/helghardt.jpg',
-                timestamp: '00:00:59 23 August 2015'
-            },
-            {
-                url: 'http://made-in-stellenbosch.com/img/louw.jpg',
-                timestamp: '00:00:59 23 August 2015'
+
+        var refreshData = function () {
+            Images.query().success(
+                function (data) {
+                    $scope.images = data.results;
+                    console.log('images');
+                    console.log($scope.images);
+                }
+            );
+        };
+
+        refreshData();
+
+        var promise;
+
+        $scope.$on('$ionicView.afterEnter', function () { // $scope.$on('$destroy'
+            console.log('ENTER');
+            promise = $interval(refreshData, REFRESH_INTERVAL);
+        });
+
+        // Cancel interval view change
+        $scope.$on('$ionicView.leave', function () {
+            console.log('LEAVE');
+            if (angular.isDefined(promise)) {
+                $interval.cancel(promise);
+                promise = undefined;
             }
-        ];
-        console.log($scope.images);
+        });
+
+        $scope.$on('$destroy', function () {
+            console.log('LEAVE');
+            if (angular.isDefined(promise)) {
+                $interval.cancel(promise);
+                promise = undefined;
+            }
+        });
+
     });

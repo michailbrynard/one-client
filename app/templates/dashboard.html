@@ -3,10 +3,10 @@
         <ion-list ng-if="images.length">
             <div class="list card" ng-repeat="image in images">
                 <div class="item item-image">
-                    <img src="{{ image.url }}">
+                    <img src="{{image.image.image}}">
                 </div>
                 <div class="item">
-                    <p>{{ image.timestamp }}</p>
+                    <p>{{ image.created_timestamp }}</p>
                 </div>
             </div>
         </ion-list>
