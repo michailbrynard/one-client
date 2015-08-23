@@ -115,36 +115,69 @@ angular.module('starter.controllers', [])
         ];
     })
 
-    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, GetImages) {
-        'use strict';
-        var groupId = $stateParams.groupId;
-        if (groupId == null) {
-            $state.go('tab.group');
-            return;
-        }
-        // $rawData = GetImages.query(groupId);
-        $scope.items = [
-            {
-                uploader: 'Human Name 1',
-                uploadedAt: '00:00:59 23 August 2015',
-                imageUrl: 'http://made-in-stellenbosch.com/img/helghardt.jpg'
-            },
-            {
-                uploader: 'Human Name 2',
-                uploadedAt: '00:00:59 23 August 2015',
-                imageUrl: 'http://made-in-stellenbosch.com/img/michail.jpg'
-            },
-            {
-                uploader: 'Human Name 3',
-                uploadedAt: '00:00:59 23 August 2015',
-                imageUrl: 'http://made-in-stellenbosch.com/img/hugo.jpg'
-            },
-            {
-                uploader: 'Human Name 4',
-                uploadedAt: '00:00:59 23 August 2015',
-                imageUrl: 'http://made-in-stellenbosch.com/img/christo.jpg'
-            }
-        ];
+    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, GetImages){
+      'use strict';
+      var groupId = $stateParams.groupId;
+      if (groupId == null) {
+        $state.go('tab.group');
+        return;
+      }
+
+      $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
+          scope: $scope
+      }).then(function (modal) {
+          $scope.modal = modal;
+      });
+
+      $scope.addUser = function (email) {
+          console.log('Create User Function called');
+          if (email) {
+              $ionicLoading.show({
+                  template: 'Adding Person...'
+              });
+
+              // User.register(user.first_name, user.email, user.password1, user.password2)
+              //     .then(function (res) {
+              //         console.log(res.status);
+              //         if (res.status === 201) {
+              //             window.alert('User added successfully!');
+              //         } else {
+              //             window.alert('Error: ' + res.message);
+              //         }
+
+              //         $ionicLoading.hide();
+              //         $scope.modal.hide();
+              //     }).catch(function (error) {
+              //         window.alert('Error: ' + error);
+                      $ionicLoading.hide();
+              //     });
+          } else {
+              window.alert('Please fill all details');
+          }
+      };
+      // $rawData = GetImages.query(groupId);
+      $scope.items = [
+        {
+          uploader : 'Human Name 1',
+          uploadedAt : '00:00:59 23 August 2015',
+          imageUrl : 'http://made-in-stellenbosch.com/img/helghardt.jpg'
+        },
+        {
+          uploader : 'Human Name 2',
+          uploadedAt : '00:00:59 23 August 2015',
+          imageUrl : 'http://made-in-stellenbosch.com/img/michail.jpg'
+        },
+        {
+          uploader : 'Human Name 3',
+          uploadedAt : '00:00:59 23 August 2015',
+          imageUrl : 'http://made-in-stellenbosch.com/img/hugo.jpg'
+        },
+        {
+          uploader : 'Human Name 4',
+          uploadedAt : '00:00:59 23 August 2015',
+          imageUrl : 'http://made-in-stellenbosch.com/img/christo.jpg'
+        },
+      ];
     })
 
     .controller('MyPhotosCtrl', function ($scope, Images, REFRESH_INTERVAL, $interval) {
