@@ -63,7 +63,11 @@
       "locator": "https://github.com/apache/cordova-plugin-whitelist.git",
       "id": "cordova-plugin-whitelist"
     },
-    "plugin"
+    {
+      "locator": "https://github.com/apache/cordova-plugin-camera",
+      "id": "cordova-plugin-camera"
+    }
+
   ],
   "cordovaPlatforms": []
 }
