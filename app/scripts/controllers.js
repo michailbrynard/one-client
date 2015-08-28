@@ -77,9 +77,12 @@ angular.module('starter.controllers', [])
                     var options = {
                         fileKey: 'image',
                         fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
-                        chunkedMode: true,
+                        chunkedMode: false,
                         mimeType: 'image/jpg',
-                        headers: {'Authorization': 'JWT ' + Auth.getToken()}
+                        headers: {
+                            'Authorization': 'JWT ' + Auth.getToken(),
+                            'Connection': 'close'
+                        }
                     };
 
                     $cordovaFileTransfer.upload(API + '/image/', imagePath, options).then(function (result) {
