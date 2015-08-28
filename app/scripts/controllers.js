@@ -75,13 +75,13 @@ angular.module('starter.controllers', [])
             document.addEventListener("deviceready", function () {
 
                 var options = {
-                    quality: 50,
+                    quality: 75,
                     destinationType: Camera.DestinationType.DATA_URL,
                     sourceType: Camera.PictureSourceType.CAMERA,
                     allowEdit: true,
                     encodingType: Camera.EncodingType.JPEG,
-                    targetWidth: 100,
-                    targetHeight: 100,
+                    //targetWidth: 100,
+                    //targetHeight: 100,
                     popoverOptions: CameraPopoverOptions,
                     saveToPhotoAlbum: false
                 };
