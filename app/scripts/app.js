@@ -8,7 +8,7 @@ var firebaseUrl = 'https://gozebra.firebaseio.com';
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 'ngFileUpload', 'starter.controllers', 'starter.services'])
 
     .constant('API', 'http://onepi.cf/api')
     //.constant('API', 'http://127.0.0.1:8000/api')

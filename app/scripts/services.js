@@ -175,7 +175,7 @@ angular.module('starter.services', ['firebase'])
 
         self.create = function(name) {
             return $http.post(API + '/groups/', {
-                'name': name
+                'group_name': name
             });
         };
 
