@@ -87,7 +87,7 @@ angular.module('starter.controllers', [])
                 };
 
                 $cordovaCamera.getPicture(options).then(function (imageData) {
-                    alert(imageData);
+                    alert('new data:' + imageData);
 
                     var blob = $scope.dataURItoBlob(imageData);
 
