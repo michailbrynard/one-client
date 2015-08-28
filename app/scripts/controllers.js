@@ -87,17 +87,13 @@ angular.module('starter.controllers', [])
                 };
 
                 $cordovaCamera.getPicture(options).then(function (imageData) {
-                    alert('new data:' + imageData);
-
-                    var blob = $scope.dataURItoBlob(imageData);
-
-                    alert(blob);
+                    alert('cool data:' + imageData);
 
                     Upload.upload({
                         url: API + '/image/',
                         fileName: 'image.jpeg',
                         fileFormDataName: 'image',
-                        file: blob
+                        file: imageData
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                         console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
