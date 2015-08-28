@@ -76,7 +76,7 @@ angular.module('starter.controllers', [])
 
                 var options = {
                     quality: 50,
-                    destinationType: Camera.DestinationType.FILE_URI,
+                    //destinationType: Camera.DestinationType.DATA_URL,
                     sourceType: Camera.PictureSourceType.CAMERA,
                     allowEdit: true,
                     encodingType: Camera.EncodingType.JPEG,
@@ -86,11 +86,16 @@ angular.module('starter.controllers', [])
                     saveToPhotoAlbum: false
                 };
 
-                $cordovaCamera.getPicture(options).then(function (imagePath) {
-                    alert('File:' + imagePath);
+                $cordovaCamera.getPicture(options).then(function (imageData) {
+                    alert(imageData);
+
+                    var blob = $scope.dataURItoBlob(imageData);
+
+                    alert(blob);
+
                     Upload.upload({
                         url: API + '/image/',
-                        file: imagePath
+                        file: blob
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                         console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
@@ -106,6 +111,26 @@ angular.module('starter.controllers', [])
             }, false);
 
         };
+
+        $scope.dataURItoBlob = function (dataURI) {
+            // convert base64/URLEncoded data component to raw binary data held in a string
+            var byteString;
+            if (dataURI.split(',')[0].indexOf('base64') >= 0)
+                byteString = atob(dataURI.split(',')[1]);
+            else
+                byteString = unescape(dataURI.split(',')[1]);
+
+            // separate out the mime component
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+            // write the bytes of the string to a typed array
+            var ia = new Uint8Array(byteString.length);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+
+            return new Blob([ia], {type: mimeString});
+        }
     })
 
     //.controller('CameraCtrl', function ($scope, $state, $cordovaFileTransfer, $ionicLoading, Camera, User, Auth, API) {
