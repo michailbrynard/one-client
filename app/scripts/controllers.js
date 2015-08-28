@@ -125,7 +125,7 @@ angular.module('starter.controllers', [])
                 $ionicLoading.show({
                     template: 'Adding Group...'
                 });
-              Group.create(name).then(function() {
+              Groups.create(name).then(function() {
 
                   $ionicLoading.hide();
                   $scope.modal.hide();
