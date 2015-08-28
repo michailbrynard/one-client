@@ -57,7 +57,8 @@ angular.module('starter.controllers', [])
             }
         };
     })
-    .controller('CameraCtrl', function ($scope, $state, $cordovaFileTransfer, $ionicLoading, Camera, User, Auth, API) {
+
+    .controller('CameraCtrl', function ($scope, $state, $ionicLoading, $cordovaCamera, Upload, User, Auth, API) {
         'use strict';
         if (!Auth.isAuthed()) {
             $state.go('login');
@@ -70,42 +71,96 @@ angular.module('starter.controllers', [])
 
             console.log('Hello');
 
-            document.addEventListener('deviceready', function () {
 
-                Camera.getPicture().then(function (imagePath) {
-                    alert('Image will be at: ' + imagePath);
-                    $ionicLoading.show({
-                        template: 'Uploading...'
-                    });
+            document.addEventListener("deviceready", function () {
 
-                    var options = {
-                        fileKey: 'image',
-                        fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
-                        chunkedMode: false,
-                        mimeType: 'image/jpg',
-                        headers: {'Authorization': 'JWT ' + Auth.getToken(), 'Connection': 'close'}
-                    };
+                var options = {
+                    quality: 50,
+                    destinationType: Camera.DestinationType.DATA_URL,
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                    allowEdit: true,
+                    encodingType: Camera.EncodingType.JPEG,
+                    targetWidth: 100,
+                    targetHeight: 100,
+                    popoverOptions: CameraPopoverOptions,
+                    saveToPhotoAlbum: false
+                };
 
-                    $cordovaFileTransfer.upload(API + '/image/', imagePath, options).then(function (result) {
-                        $ionicLoading.hide();
-                        alert('SUCCESS: ' + JSON.stringify(result));
-                        alert('Result_' + result.response[0] + '_ending');
-                        alert('success');
-                        alert(JSON.stringify(result.response));
-
-                    }, function (err) {
-                        alert('ERROR: ' + JSON.stringify(err));
-                        $ionicLoading.hide();
-                        //alert(JSON.stringify(err));
-                    }, function (progress) {
-                        // constant progress updates
-                    });
+                $cordovaCamera.getPicture(options).then(function (imageData) {
+                    alert(imageData);
+                    Upload.upload({
+                        url: API + '/image/',
+                        file: imageData
+                    }).progress(function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                    }).success(function (data, status, headers, config) {
+                        alert('file ' + config.file.name + 'uploaded. Response: ' + data);
+                    }).error(function (data, status, headers, config) {
+                        alert('error status: ' + status);
+                    })
                 }, function (err) {
                     alert(err);
                 });
-            });
+
+            }, false);
+
         };
     })
+
+    //.controller('CameraCtrl', function ($scope, $state, $cordovaFileTransfer, $ionicLoading, Camera, User, Auth, API) {
+    //    'use strict';
+    //    if (!Auth.isAuthed()) {
+    //        $state.go('login');
+    //    }
+    //
+    //
+    //    // open PhotoLibrary
+    //    $scope.openPhotoLibrary = function () {
+    //        'use strict';
+    //
+    //        console.log('Hello');
+    //
+    //        document.addEventListener('deviceready', function () {
+    //
+    //            var camera_options = {
+    //                quality : 75
+    //            };
+    //
+    //            Camera.getPicture(camera_options).then(function (imagePath) {
+    //                alert('Image will be at: ' + imagePath);
+    //                $ionicLoading.show({
+    //                    template: 'Uploading...'
+    //                });
+    //
+    //                var options = {
+    //                    fileKey: 'image',
+    //                    fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
+    //                    chunkedMode: false,
+    //                    mimeType: 'image/jpg',
+    //                    headers: {'Authorization': 'JWT ' + Auth.getToken(), 'Connection': 'close'}
+    //                };
+    //
+    //                $cordovaFileTransfer.upload(API + '/image/', imagePath, options).then(function (result) {
+    //                    $ionicLoading.hide();
+    //                    alert('SUCCESS: ' + JSON.stringify(result));
+    //                    alert('Result_' + result.response[0] + '_ending');
+    //                    alert('success');
+    //                    alert(JSON.stringify(result.response));
+    //
+    //                }, function (err) {
+    //                    alert('ERROR: ' + JSON.stringify(err));
+    //                    $ionicLoading.hide();
+    //                    //alert(JSON.stringify(err));
+    //                }, function (progress) {
+    //                    // constant progress updates
+    //                });
+    //            }, function (err) {
+    //                alert(err);
+    //            });
+    //        });
+    //    };
+    //})
 
     .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
         'use strict';
