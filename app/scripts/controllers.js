@@ -63,10 +63,14 @@ angular.module('starter.controllers', [])
             $state.go('login');
         }
 
-        document.addEventListener('deviceready', function () {
-            // open PhotoLibrary
-            $scope.openPhotoLibrary = function () {
-                'use strict';
+
+        // open PhotoLibrary
+        $scope.openPhotoLibrary = function () {
+            'use strict';
+
+            console.log('Hello');
+
+            document.addEventListener('deviceready', function () {
 
                 Camera.getPicture().then(function (imagePath) {
                     alert('Image will be at: ' + imagePath);
@@ -77,9 +81,9 @@ angular.module('starter.controllers', [])
                     var options = {
                         fileKey: 'image',
                         fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
-                        chunkedMode: true,
+                        chunkedMode: false,
                         mimeType: 'image/jpg',
-                        headers: {'Authorization': 'JWT ' + Auth.getToken()}
+                        headers: {'Authorization': 'JWT ' + Auth.getToken(), 'Connection': 'close'}
                     };
 
                     $cordovaFileTransfer.upload(API + '/image/', imagePath, options).then(function (result) {
@@ -99,8 +103,8 @@ angular.module('starter.controllers', [])
                 }, function (err) {
                     alert(err);
                 });
-            };
-        });
+            });
+        };
     })
 
     .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
@@ -122,78 +126,79 @@ angular.module('starter.controllers', [])
                 $ionicLoading.show({
                     template: 'Adding Group...'
                 });
-              Groups.create(name).then(function() {
+                Groups.create(name).then(function () {
 
-                  $ionicLoading.hide();
-                  $scope.modal.hide();
-                  alert('Group Added');
-              }).catch(function (error) {
-                  window.alert('Error:' + error.message);
-                  $ionicLoading.hide();
-              });
+                    $ionicLoading.hide();
+                    $scope.modal.hide();
+                    alert('Group Added');
+                }).catch(function (error) {
+                    window.alert('Error:' + error.message);
+                    $ionicLoading.hide();
+                });
             } else {
                 window.alert('Please fill all details');
             }
         };
 
-        Groups.list().then(function (rawData){
-          var items = [];
-          for (var i = 0; i < rawData.data.results.length; i++) {
-            items[i] = {
-              'id': rawData.data.results[i].group.id,
-              'title': rawData.data.results[i].group.group_name,
-              'last_upload': rawData.data.results[i].last_upload
-            };
-          }
-          $scope.items = items;
+        Groups.list().then(function (rawData) {
+            var items = [];
+            for (var i = 0; i < rawData.data.results.length; i++) {
+                items[i] = {
+                    'id': rawData.data.results[i].group.id,
+                    'title': rawData.data.results[i].group.group_name,
+                    'last_upload': rawData.data.results[i].last_upload
+                };
+            }
+            $scope.items = items;
         });
     })
 
-    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups){
-      'use strict';
-      var groupId = $stateParams.groupId;
-      if (groupId == null) {
-        $state.go('tab.group');
-        return;
-      }
+    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
+        'use strict';
+        var groupId = $stateParams.groupId;
+        if (groupId == null) {
+            $state.go('tab.group');
+            return;
+        }
 
-      $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
-          scope: $scope
-      }).then(function (modal) {
-          $scope.modal = modal;
-      });
+        $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
+            scope: $scope
+        }).then(function (modal) {
+            $scope.modal = modal;
+        });
 
-      $scope.addUser = function (email) {
-          console.log('Create User Function called');
-          if (email) {
-              $ionicLoading.show({
-                  template: 'Adding Person...'
-              });
-              Groups.addUser(groupId, email).then(function() {
+        $scope.addUser = function (email) {
+            console.log('Create User Function called');
+            if (email) {
+                $ionicLoading.show({
+                    template: 'Adding Person...'
+                });
+                Groups.addUser(groupId, email).then(function () {
 
-                  $ionicLoading.hide();
-                  $scope.modal.hide();
-                  alert('Person Added');
-              }).catch(function (error) {
-                  window.alert('Error:' + error.message);
-                  $ionicLoading.hide();
-              });
-          } else {
-              window.alert('Please fill all details');
-          }
-      };
-
-      Groups.getImages(groupId).then(function(rawData){
-        console.log(JSON.stringify(rawData));
-          var items = [];
-          for (var i = 0; i < rawData.data.results.length; i++) {
-            items[i] = {
-              'uploader': rawData.data.results[i].user_group.user.first_name,
-              'uploadedAt': rawData.data.results[i].created_timestamp,
-              'imageUrl': rawData.data.results[i].image.image
+                    $ionicLoading.hide();
+                    $scope.modal.hide();
+                    alert('Person Added');
+                }).catch(function (error) {
+                    window.alert('Error:' + error.message);
+                    $ionicLoading.hide();
+                });
+            } else {
+                window.alert('Please fill all details');
             }
-          };
-          $scope.items = items;
+        };
+
+        Groups.getImages(groupId).then(function (rawData) {
+            console.log(JSON.stringify(rawData));
+            var items = [];
+            for (var i = 0; i < rawData.data.results.length; i++) {
+                items[i] = {
+                    'uploader': rawData.data.results[i].user_group.user.first_name,
+                    'uploadedAt': rawData.data.results[i].created_timestamp,
+                    'imageUrl': rawData.data.results[i].image.image
+                }
+            }
+            ;
+            $scope.items = items;
         });
     })
 
@@ -217,27 +222,27 @@ angular.module('starter.controllers', [])
 
         // Polling functions
         /*
-        var promise;
-        $scope.$on('$ionicView.afterEnter', function () { // $scope.$on('$destroy'
-            console.log('ENTER');
-            promise = $interval(refreshData, REFRESH_INTERVAL);
-        });
+         var promise;
+         $scope.$on('$ionicView.afterEnter', function () { // $scope.$on('$destroy'
+         console.log('ENTER');
+         promise = $interval(refreshData, REFRESH_INTERVAL);
+         });
 
-        // Cancel interval view change
-        $scope.$on('$ionicView.leave', function () {
-            console.log('LEAVE');
-            if (angular.isDefined(promise)) {
-                $interval.cancel(promise);
-                promise = undefined;
-            }
-        });
+         // Cancel interval view change
+         $scope.$on('$ionicView.leave', function () {
+         console.log('LEAVE');
+         if (angular.isDefined(promise)) {
+         $interval.cancel(promise);
+         promise = undefined;
+         }
+         });
 
-        $scope.$on('$destroy', function () {
-            console.log('LEAVE');
-            if (angular.isDefined(promise)) {
-                $interval.cancel(promise);
-                promise = undefined;
-            }
-        });
-        */
+         $scope.$on('$destroy', function () {
+         console.log('LEAVE');
+         if (angular.isDefined(promise)) {
+         $interval.cancel(promise);
+         promise = undefined;
+         }
+         });
+         */
     });
