@@ -118,7 +118,7 @@ angular.module('starter.controllers', [])
             if (dataURI.split(',')[0].indexOf('base64') >= 0)
                 byteString = atob(dataURI.split(',')[1]);
             else
-                byteString = unescape(dataURI.split(',')[1]);
+                byteString = decodeURI(dataURI.split(',')[1]);
 
             // separate out the mime component
             var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
