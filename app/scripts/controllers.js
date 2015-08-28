@@ -76,7 +76,7 @@ angular.module('starter.controllers', [])
 
                 var options = {
                     quality: 50,
-                    destinationType: Camera.DestinationType.DATA_URL,
+                    destinationType: Camera.DestinationType.FILE_URI,
                     sourceType: Camera.PictureSourceType.CAMERA,
                     allowEdit: true,
                     encodingType: Camera.EncodingType.JPEG,
@@ -86,11 +86,11 @@ angular.module('starter.controllers', [])
                     saveToPhotoAlbum: false
                 };
 
-                $cordovaCamera.getPicture(options).then(function (imageData) {
-                    alert(imageData);
+                $cordovaCamera.getPicture(options).then(function (imagePath) {
+                    alert('File:' + imagePath);
                     Upload.upload({
                         url: API + '/image/',
-                        file: imageData
+                        file: imagePath
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                         console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
