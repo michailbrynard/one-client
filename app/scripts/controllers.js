@@ -115,12 +115,13 @@ angular.module('starter.controllers', [])
         };
 
         $scope.dataURItoBlob = function (dataURI) {
-            var binary = atob(dataURI.split(',')[1]);
-            var array = [];
-            for (var i = 0; i < binary.length; i++) {
-                array.push(binary.charCodeAt(i));
+            var byteString = atob(dataURI.split(',')[1]);
+            var ab = new ArrayBuffer(byteString.length);
+            var ia = new Uint8Array(ab);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
             }
-            return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
+            return new Blob([ab], {type: 'image/jpeg'});
         }
     })
 
