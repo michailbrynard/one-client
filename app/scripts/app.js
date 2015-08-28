@@ -11,6 +11,7 @@ var firebaseUrl = 'https://gozebra.firebaseio.com';
 angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'ngCordova', 'starter.controllers', 'starter.services'])
 
     .constant('API', 'http://onepi.cf/api')
+    //.constant('API', 'http://127.0.0.1:8000/api')
     .constant('REFRESH_INTERVAL', 3000)
 
     .config(function ($httpProvider, $ionicConfigProvider) {
