@@ -16,6 +16,4 @@
         <preference name="android-versionCode" value="19" />
         <preference name="android-targetSdkVersion" value="19" />
     </platform>
-    <plugin name="org.apache.cordova.file-transfer" spec="^0.5.0" />
-    <plugin name="cordova-plugin-camera" spec="^1.2.0" />
 </widget>

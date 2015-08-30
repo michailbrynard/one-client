@@ -1,4 +1,5 @@
 install:
+	brew install android-sdk ant gradle
 	npm update npm -g
 	npm install -g cordova ionic bower grunt 
 	npm install -g ios-deploy
@@ -7,7 +8,7 @@ install:
 	sudo gem install compass
 	grunt build
 	cordova platform add android
-
+	ionic plugin add cordova-plugin-whitelist
 
 run:
 	cordova run andriod -- device
