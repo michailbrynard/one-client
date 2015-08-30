@@ -63,7 +63,7 @@ angular.module('starter.controllers', [])
         if (!Auth.isAuthed()) {
             $state.go('login');
         }
-
+		alert('In camera controller');
 
         //TODO: Figure out why Upload doesn't work on Android and FileTransfer doesnt work on iOS
         $scope.getPicture = function () {
@@ -104,6 +104,7 @@ angular.module('starter.controllers', [])
                     });
 
                 } else if (ionic.Platform.isAndroid()) {
+					alert('android');
                     var camera_options = {
                         quality: 75,
                         sourceType: Camera.PictureSourceType.CAMERA,
