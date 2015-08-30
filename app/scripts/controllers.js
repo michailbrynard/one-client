@@ -1,4 +1,4 @@
-/*global angular, console, window, alert */
+/*global angular, console, window, alert, ionic */
 
 angular.module('starter.controllers', [])
 
@@ -58,77 +58,95 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('CameraCtrl', function ($scope, $state, $ionicLoading, $cordovaCamera, Upload, User, Auth, API) {
+    .controller('CameraCtrl', function ($scope, $state, $ionicLoading, $cordovaFileTransfer, $cordovaCamera, Upload, User, Auth, API) {
         'use strict';
         if (!Auth.isAuthed()) {
             $state.go('login');
         }
 
 
-        // open PhotoLibrary
-        $scope.openPhotoLibrary = function () {
+        //TODO: Figure out why Upload doesn't work on Android and FileTransfer doesnt work on iOS
+        $scope.getPicture = function () {
             'use strict';
-
-            console.log('Hello');
-
 
             document.addEventListener("deviceready", function () {
 
-                var options = {
-                    quality: 75,
-                    destinationType: Camera.DestinationType.DATA_URL,
-                    sourceType: Camera.PictureSourceType.CAMERA,
-                    allowEdit: true,
-                    encodingType: Camera.EncodingType.JPEG,
-                    targetWidth: 800,
-                    targetHeight: 800,
-                    popoverOptions: CameraPopoverOptions,
-                    saveToPhotoAlbum: false
-                };
+                if (ionic.Platform.isIOS()) {
+                    alert('ios');
+                    var options = {
+                        quality: 75,
+                        destinationType: Camera.DestinationType.DATA_URL,
+                        sourceType: Camera.PictureSourceType.CAMERA,
+                        allowEdit: true,
+                        encodingType: Camera.EncodingType.JPEG,
+                        targetWidth: 1024,
+                        targetHeight: 1024,
+                        popoverOptions: CameraPopoverOptions,
+                        saveToPhotoAlbum: true
+                    };
 
-                $cordovaCamera.getPicture(options).then(function (imageData) {
-                    alert('cool data:' + imageData);
+                    $cordovaCamera.getPicture(options).then(function (imageData) {
+                        Upload.upload({
+                            url: API + '/image/',
+                            fileName: 'image.jpeg',
+                            fileFormDataName: 'image',
+                            file: imageData
+                        }).progress(function (evt) {
+                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                            console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                        }).success(function (data, status, headers, config) {
+                            alert('Response: ' + JSON.stringify(data));
+                        }).error(function (data, status, headers, config) {
+                            alert('error status: ' + status);
+                        });
+                    }, function (err) {
+                        alert(err);
+                    });
 
-                    Upload.upload({
-                        url: API + '/image/',
-                        fileName: 'image.jpeg',
-                        fileFormDataName: 'image',
-                        file: imageData
-                    }).progress(function (evt) {
-                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                        console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-                    }).success(function (data, status, headers, config) {
-                        alert('Response: ' + JSON.stringify(data));
-                    }).error(function (data, status, headers, config) {
-                        alert('error status: ' + status);
-                    })
-                }, function (err) {
-                    alert(err);
-                });
+                } else if (ionic.Platform.isAndroid()) {
+                    var camera_options = {
+                        quality: 75,
+                        sourceType: Camera.PictureSourceType.CAMERA,
+                        allowEdit: true,
+                        encodingType: Camera.EncodingType.JPEG,
+                        targetWidth: 1024,
+                        targetHeight: 1024,
+                        popoverOptions: CameraPopoverOptions,
+                        saveToPhotoAlbum: true
+                    };
 
+                    $cordovaCamera.getPicture(camera_options).then(function (imagePath) {
+                        alert('Image will be at: ' + imagePath);
+                        $ionicLoading.show({
+                            template: 'Uploading...'
+                        });
+
+                        var options = {
+                            fileKey: 'image',
+                            fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
+                            chunkedMode: true,
+                            mimeType: 'image/jpg',
+                            headers: {'Authorization': 'JWT ' + Auth.getToken(), 'Connection': 'close'}
+                        };
+
+                        $cordovaFileTransfer.upload(API + '/image/', imagePath, options).then(function (result) {
+                            $ionicLoading.hide();
+                            alert('SUCCESS: ' + JSON.stringify(result));
+                            alert('Result_' + result.response[0] + '_ending');
+                            alert('success');
+                            alert(JSON.stringify(result.response));
+
+                        }, function (err) {
+                            alert('ERROR: ' + JSON.stringify(err));
+                            $ionicLoading.hide();
+                            //alert(JSON.stringify(err));
+                        }, function (progress) {
+                            // constant progress updates
+                        });
+                    });
+                }
             }, false);
-
         };
-
-        $scope.dataURItoBlob = function (dataURI) {
-            // convert base64/URLEncoded data component to raw binary data held in a string
-            var byteString;
-            if (dataURI.split(',')[0].indexOf('base64') >= 0)
-                byteString = atob(dataURI.split(',')[1]);
-            else
-                byteString = decodeURI(dataURI.split(',')[1]);
-
-            // separate out the mime component
-            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-            // write the bytes of the string to a typed array
-            var ia = new Uint8Array(byteString.length);
-            for (var i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
-            }
-
-            return new Blob([ia], {type: mimeString});
-        }
     })
 
     //.controller('CameraCtrl', function ($scope, $state, $cordovaFileTransfer, $ionicLoading, Camera, User, Auth, API) {
@@ -185,7 +203,8 @@ angular.module('starter.controllers', [])
     //    };
     //})
 
-    .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
+    .
+    controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
         'use strict';
         $scope.openGroup = function (id) {
             $state.go('tab.groupView', {

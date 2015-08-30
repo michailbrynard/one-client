@@ -187,13 +187,13 @@ angular.module('starter.services', ['firebase'])
 
         self.getImages = function(id) {
             return $http.get(API + '/images/' + id + '/');
-        }
+        };
 
         self.addUser = function(groupId, email) {
             return $http.post(API + '/groups/' + groupId + '/', {
                 'email': email
             });
-        }
+        };
 
     })
 
