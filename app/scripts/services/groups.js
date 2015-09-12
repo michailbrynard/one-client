@@ -25,5 +25,8 @@ angular.module('starter.services.groups', [])
                 'email': email
             });
         };
+        self.getGroup = function (groupId) {
+            return $http.get(API + '/groups/' + groupId + '/');
+        }
 
     });

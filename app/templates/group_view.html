@@ -1,9 +1,9 @@
 <ion-view view-title="Group Photos">
     <ion-content class="padding">
 
-        <button ng-click="modal.show()"
+        <button ng-click="modal.show()" ng-if="items.length"
                 class="button button-full button-balanced icon-left ion-person-add">
-            Add Person
+            Manage People
         </button>
         <ion-list ng-if="items.length">
             <div class="list card" ng-repeat="item in items">
@@ -18,11 +18,6 @@
                     <img src="{{ item.imageUrl }}">
                 </div>
             </div>
-        </ion-list>
-        <ion-list ng-if="!items.length">
-            <ion-item class="textCenter">
-                <i class="icon ion-loading-c"></i> Loading Photos
-            </ion-item>
         </ion-list>
     </ion-content>
 </ion-view>

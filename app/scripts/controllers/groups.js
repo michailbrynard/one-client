@@ -4,6 +4,7 @@ angular.module('starter.controllers.groups', [])
 
     .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
         'use strict';
+        $ionicLoading.show({template: 'Loading...'});
         $scope.openGroup = function (id) {
             $state.go('tab.groupView', {
                 groupId: id
@@ -45,6 +46,7 @@ angular.module('starter.controllers.groups', [])
                 };
             }
             $scope.items = items;
+            $ionicLoading.hide();
         });
     })
 
@@ -55,6 +57,7 @@ angular.module('starter.controllers.groups', [])
             $state.go('tab.group');
             return;
         }
+        $ionicLoading.show({template: 'Loading...'});
 
         $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
             scope: $scope
@@ -82,8 +85,17 @@ angular.module('starter.controllers.groups', [])
             }
         };
 
+        Groups.getGroup(groupId).then(function (rawData) {
+            var people = [];
+            for (var i = 0; i < rawData.data.results.length; i++) {
+                people[i] = {
+                    'id': rawData.data.results[i].user.id,
+                    'name': rawData.data.results[i].user.first_name
+                };
+            }
+            $scope.people = people;
+        });
         Groups.getImages(groupId).then(function (rawData) {
-            console.log(JSON.stringify(rawData));
             var items = [];
             for (var i = 0; i < rawData.data.results.length; i++) {
                 items[i] = {
@@ -93,5 +105,6 @@ angular.module('starter.controllers.groups', [])
                 };
             }
             $scope.items = items;
+            $ionicLoading.hide();
         });
     });
