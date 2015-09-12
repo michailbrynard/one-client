@@ -57,7 +57,11 @@ angular.module('starter.controllers.account', [])
         };
     })
 
-    .controller('AccountViewCtrl', function ($scope, Images) {
+    .controller('AccountViewCtrl', function ($scope, $state, Auth) {
         'use strict';
-        window.alert("We Are All in the account");
+        $scope.logOut = function (user) {
+            window.alert('Logging out, goodbye');
+            Auth.logout();
+            $state.go('login');
+        };
     });

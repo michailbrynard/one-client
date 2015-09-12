@@ -123,9 +123,9 @@ angular.module('starter', [
             })
 
             .state('tab.account', {
-                url: '/group/account',
+                url: '/account',
                 views: {
-                    'tab-group': {
+                    'tab-account': {
                         templateUrl: 'templates/account.html',
                         controller: 'AccountViewCtrl'
                     }
