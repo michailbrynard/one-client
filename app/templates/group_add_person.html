@@ -10,10 +10,10 @@
             </label>
             <button class="button button-full button-positive" ng-click="addUser(email)">Add</button>
         </div>
-        <ion-list ng-if="people.length" show-delete="false">
+        <ion-list ng-if="people.length" show-delete="true">
             <div class="list card" ng-repeat="person in people">
               <ion-item>
-                <ion-delete-button class="ion-minus-circled"></ion-delete-button>
+                <ion-delete-button class="ion-minus-circled" ng-click="removeHuman({{ groupId }}, {{ person.id }}, {{ person.name }})"></ion-delete-button>
                 {{ person.name }}
               </ion-item>
             </div>

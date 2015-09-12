@@ -27,6 +27,10 @@ angular.module('starter.services.groups', [])
         };
         self.getGroup = function (groupId) {
             return $http.get(API + '/groups/' + groupId + '/');
+        };
+
+        self.removeHuman = function(groupId, humanId) {
+            return $http.post(API + '/groups/' + groupId + '/delete/' + humanId + '/');
         }
 
     });

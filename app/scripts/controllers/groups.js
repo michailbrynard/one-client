@@ -50,13 +50,14 @@ angular.module('starter.controllers.groups', [])
         });
     })
 
-    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $http, $ionicModal, Groups) {
+    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $http, $ionicModal, Groups, $ionicPopup) {
         'use strict';
             var groupId = $stateParams.groupId;
             if (groupId == null) {
                 $state.go('tab.group');
                 return;
             }
+            $scope.groupId = groupId;
             var viewedUrls = [];
             $ionicLoading.show({template: 'Loading...'});
 
@@ -129,5 +130,26 @@ angular.module('starter.controllers.groups', [])
                     );
                     $scope.$broadcast('scroll.infiniteScrollComplete');
                 }
+            };
+            $scope.removeHuman = function(groupId, humanId, name) {
+                $ionicPopup.confirm({
+                    title: 'Confirm',
+                    template: 'Are you sure you would like to remove ' + name
+                    });
+                    confirmPopup.then(function(res) {
+                    if(res) {
+                        Groups.removeHuman(groupId, humanId).then(function(rawData) {
+                            if (rawData.data.status == 'success') {
+                                $ionicPopup.alert({title: 'Deleted them'});
+                            } else {
+                                $ionicPopup.alert({title: rawData.data.message});
+                            }
+                        }).catch(function (error) {
+                            $ionicPopup.alert({title: "Error", template:error.message});
+                            $ionicLoading.hide();
+                        });;
+                    }
+                });
+
             };
     });
