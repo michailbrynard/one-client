@@ -48,10 +48,10 @@ angular.module('starter', [
             }
             if (window.StatusBar) {
                 // org.apache.cordova.statusbar required
-                StatusBar.styleLightContent();
+                StatusBar.styleDefault();
+                StatusBar.overlaysWebView(true);
+                StatusBar.show();
             }
-            // To Resolve Bug
-            ionic.Platform.fullScreen();
 
             $rootScope.firebaseUrl = firebaseUrl;
             $rootScope.displayName = null;

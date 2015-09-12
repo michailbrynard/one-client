@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="19" id="cf.onepi.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="19" id="cf.onepi.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets"
+        xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>One</name>
     <description>
         Just Once.
@@ -7,13 +8,13 @@
     <author email="dev@cordova.apache.org" href="http://onepi.cf">
         The Core Team
     </author>
-    <content src="index.html" />
-    <access origin="*" />
-    <allow-navigation href="*" />
+    <content src="index.html"/>
+    <access origin="*"/>
+    <allow-navigation href="*"/>
     <platform name="android">
-        <preference name="AndroidLaunchMode" value="singleTop" />
-        <preference name="android-minSdkVersion" value="19" />
-        <preference name="android-versionCode" value="19" />
-        <preference name="android-targetSdkVersion" value="19" />
+        <preference name="AndroidLaunchMode" value="singleTop"/>
+        <preference name="android-minSdkVersion" value="19"/>
+        <preference name="android-versionCode" value="19"/>
+        <preference name="android-targetSdkVersion" value="19"/>
     </platform>
 </widget>

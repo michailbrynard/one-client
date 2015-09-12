@@ -65,7 +65,8 @@
     {
       "locator": "https://github.com/apache/cordova-plugin-file-transfer",
       "id": "cordova-plugin-file-transfer"
-    }
+    },
+    "cordova-plugin-statusbar"
   ],
   "cordovaPlatforms": []
 }
