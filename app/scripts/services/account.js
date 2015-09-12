@@ -110,4 +110,8 @@ angular.module('starter.services.account', [])
         self.getCurrent = function () {
             return Auth.getUser();
         };
+
+        self.canUpload = function() {
+            return $http.get(API + '/one/');
+        }
     });

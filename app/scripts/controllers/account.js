@@ -13,7 +13,6 @@ angular.module('starter.controllers.account', [])
         });
 
         $scope.registerUser = function (user) {
-            window.alert('Create User Function called');
             if (user && user.first_name && user.email && user.password1 && user.password2) {
                 $ionicLoading.show({
                     template: 'Signing Up...'
@@ -23,19 +22,19 @@ angular.module('starter.controllers.account', [])
                     .then(function (res) {
                         console.log(res.status);
                         if (res.status === 201) {
-                            window.alert('User created successfully!');
+                            $ionicPopup.alert({title: 'User created successfully!'});
                         } else {
-                            window.alert('Error: ' + res.message);
+                            $ionicPopup.alert({title: "Error", template: res.message});
                         }
 
                         $ionicLoading.hide();
                         $scope.modal.hide();
                     }).catch(function (error) {
-                        window.alert('Error: ' + error);
+                        $ionicPopup.alert({title: "Error", template: error});
                         $ionicLoading.hide();
                     });
             } else {
-                window.alert('Please fill all details');
+                $ionicPopup.alert({title: 'Please fill all details'});
             }
         };
 
@@ -48,11 +47,11 @@ angular.module('starter.controllers.account', [])
                     $ionicLoading.hide();
                     $state.go('tab.camera');
                 }).catch(function (error) {
-                    window.alert('Authentication failed:' + error.message);
+                    $ionicPopup.alert({title: 'Authentication failed', template: error.message});
                     $ionicLoading.hide();
                 });
             } else {
-                window.alert('Please enter both email and password');
+                $ionicPopup.alert({title: 'Please enter both email and password'});
             }
         };
     })
@@ -60,7 +59,7 @@ angular.module('starter.controllers.account', [])
     .controller('AccountViewCtrl', function ($scope, $state, Auth) {
         'use strict';
         $scope.logOut = function (user) {
-            window.alert('Logging out, goodbye');
+            $ionicPopup.alert({title: 'Logging out, goodbye'});
             Auth.logout();
             $state.go('login');
         };
