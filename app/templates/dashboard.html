@@ -1,16 +1,16 @@
 <ion-view view-title="Photos">
     <ion-content class="padding">
-        <ion-list ng-if="images.length">
-            <div class="list card" ng-repeat="image in images">
+        <ion-list ng-if="items.length">
+            <div class="list card" ng-repeat="item in items">
                 <div class="item item-image">
-                    <img src="{{image.image.image}}" >
+                    <img src="{{ item.imageUrl }}">
                 </div>
                 <div class="item">
-					<p></p>
+                    <p>{{ item.uploadedAt }}</p>
                 </div>
             </div>
         </ion-list>
-        <ion-list ng-if="!images.length">
+        <ion-list ng-if="!items.length">
             <ion-item class="textCenter">
                 <i class="icon ion-loading-c"></i> Loading Photos
             </ion-item>
