@@ -101,7 +101,7 @@ angular.module('starter.controllers.groups', [])
                 var items = [];
                 for (var i = 0; i < rawData.data.results.length; i++) {
                     items[i] = {
-                        'uploader': rawData.data.results[i].user_group.user.first_name,
+                        'uploader': rawData.data.results[i].image.user.first_name,
                         'uploadedAt': rawData.data.results[i].created_timestamp,
                         'imageUrl': rawData.data.results[i].image.image
                     };
@@ -120,7 +120,7 @@ angular.module('starter.controllers.groups', [])
                             console.log(JSON.stringify(rawData));
                             for (var i = 0; i < rawData.results.length; i++) {
                                 $scope.items.push({
-                                    'uploader': rawData.results[i].user_group.user.first_name,
+                                    'uploader': rawData.results[i].image.user.first_name,
                                     'imageUrl': rawData.results[i].image.image,
                                     'uploadedAt': rawData.results[i].image.created_timestamp
                                 });

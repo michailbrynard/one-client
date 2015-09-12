@@ -56,7 +56,7 @@ angular.module('starter.controllers.account', [])
         };
     })
 
-    .controller('AccountViewCtrl', function ($scope, $state, Auth) {
+    .controller('AccountViewCtrl', function ($scope, $state, Auth, $ionicPopup) {
         'use strict';
         $scope.logOut = function (user) {
             $ionicPopup.alert({title: 'Logging out, goodbye'});

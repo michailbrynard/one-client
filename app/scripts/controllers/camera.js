@@ -121,7 +121,7 @@ angular.module('starter.controllers.camera', [])
                                     $ionicPopup.show({
                                         template: values,
                                         title: 'Select Groups',
-                                        subTitle: 'Which grups do you want to send to?',
+                                        subTitle: 'Which groups do you want to send to?',
                                         scope: $scope,
                                         buttons: [
                                             { text: 'Cancel' },
