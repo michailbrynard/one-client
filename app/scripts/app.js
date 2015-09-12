@@ -18,7 +18,10 @@ angular.module('starter', [
     'starter.controllers.camera',
     'starter.controllers.dashboard',
     'starter.controllers.groups',
-    'starter.services'
+    'starter.services.account',
+    'starter.services.camera',
+    'starter.services.dashboard',
+    'starter.services.groups',
 ])
 
     .constant('API', 'http://onepi.cf/api')

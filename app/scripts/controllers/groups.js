@@ -90,7 +90,7 @@ angular.module('starter.controllers.groups', [])
                     'uploader': rawData.data.results[i].user_group.user.first_name,
                     'uploadedAt': rawData.data.results[i].created_timestamp,
                     'imageUrl': rawData.data.results[i].image.image
-                }
+                };
             }
             $scope.items = items;
         });

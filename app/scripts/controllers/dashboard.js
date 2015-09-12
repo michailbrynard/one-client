@@ -6,10 +6,17 @@ angular.module('starter.controllers.dashboard', [])
 
         var refreshData = function () {
             Images.query().success(
-                function (data) {
-                    $scope.images = data.results;
-                    console.log('images');
-                    console.log($scope.images);
+                function (rawData) {
+                    console.log(JSON.stringify(rawData));
+                    var items = [];
+                    for (var i = 0; i < rawData.results.length; i++) {
+                        items[i] = {
+                            'imageUrl': rawData.results[i].image.image,
+                            'uploadedAt': rawData.results[i].image.created_timestamp
+                        };
+                    }
+                    $scope.items = items;
+                    console.log(items)
                 }
             );
         };
