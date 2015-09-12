@@ -2,7 +2,7 @@
 
 angular.module('starter.controllers.groups', [])
 
-    .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
+    .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups, $ionicPopup) {
         'use strict';
         $ionicLoading.show({template: 'Loading...'});
         $scope.openGroup = function (id) {
@@ -118,6 +118,7 @@ angular.module('starter.controllers.groups', [])
                             console.log(JSON.stringify(rawData));
                             for (var i = 0; i < rawData.results.length; i++) {
                                 $scope.items.push({
+                                    'uploader': rawData.data.results[i].user_group.user.first_name,
                                     'imageUrl': rawData.results[i].image.image,
                                     'uploadedAt': rawData.results[i].image.created_timestamp
                                 });

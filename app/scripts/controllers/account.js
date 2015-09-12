@@ -2,7 +2,7 @@
 
 angular.module('starter.controllers.account', [])
 
-    .controller('LoginCtrl', function ($scope, $ionicModal, $state, $ionicLoading, $rootScope, User) {
+    .controller('LoginCtrl', function ($scope, $ionicModal, $state, $ionicLoading, $rootScope, User, $ionicPopup) {
         //console.log('Login Controller Initialized');
         'use strict';
 
