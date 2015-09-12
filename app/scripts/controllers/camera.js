@@ -15,7 +15,7 @@ angular.module('starter.controllers.camera', [])
             document.addEventListener("deviceready", function () {
 
                 if (ionic.Platform.isIOS()) {
-                    alert('ios');
+                    alert('You are using ios');
                     var options = {
                         quality: 75,
                         destinationType: Camera.DestinationType.DATA_URL,
@@ -47,7 +47,7 @@ angular.module('starter.controllers.camera', [])
                     });
 
                 } else if (ionic.Platform.isAndroid()) {
-                    alert('android');
+                    alert('You are using Android');
                     var camera_options = {
                         quality: 75,
                         sourceType: Camera.PictureSourceType.CAMERA,
@@ -60,7 +60,6 @@ angular.module('starter.controllers.camera', [])
                     };
 
                     $cordovaCamera.getPicture(camera_options).then(function (imagePath) {
-                        alert('Image will be at: ' + imagePath);
                         $ionicLoading.show({
                             template: 'Uploading...'
                         });
@@ -75,11 +74,7 @@ angular.module('starter.controllers.camera', [])
 
                         $cordovaFileTransfer.upload(API + '/image/', imagePath, options).then(function (result) {
                             $ionicLoading.hide();
-                            alert('SUCCESS: ' + JSON.stringify(result));
-                            alert('Result_' + result.response[0] + '_ending');
-                            alert('success');
-                            alert(JSON.stringify(result.response));
-
+                            window.alert("Image Uploaded");
                         }, function (err) {
                             alert('ERROR: ' + JSON.stringify(err));
                             $ionicLoading.hide();
@@ -88,6 +83,10 @@ angular.module('starter.controllers.camera', [])
                             // constant progress updates
                         });
                     });
+                }
+                else
+                {
+                    window.alert("Your is not recognised, and cannot submit photos");
                 }
             }, false);
         };
