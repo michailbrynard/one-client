@@ -29,9 +29,6 @@ angular.module('starter.controllers.account', [])
 
                         $ionicLoading.hide();
                         $scope.modal.hide();
-                    }).catch(function (error) {
-                        $ionicPopup.alert({title: "Error", template: error});
-                        $ionicLoading.hide();
                     });
             } else {
                 $ionicPopup.alert({title: 'Please fill all details'});
@@ -46,9 +43,6 @@ angular.module('starter.controllers.account', [])
                 User.login(user.email, user.password).then(function (res) {
                     $ionicLoading.hide();
                     $state.go('tab.camera');
-                }).catch(function (error) {
-                    $ionicPopup.alert({title: 'Authentication failed', template: error.message});
-                    $ionicLoading.hide();
                 });
             } else {
                 $ionicPopup.alert({title: 'Please enter both email and password'});
@@ -56,7 +50,7 @@ angular.module('starter.controllers.account', [])
         };
     })
 
-    .controller('AccountViewCtrl', function ($scope, $state, Auth, $ionicPopup) {
+    .controller('AccountViewCtrl', function ($scope, $state, Auth, $ionicPopup, User) {
         'use strict';
         $scope.logOut = function (user) {
             $ionicPopup.alert({title: 'Logging out, goodbye'});
@@ -64,4 +58,34 @@ angular.module('starter.controllers.account', [])
             $state.go('login');
         };
 
+        $scope.createSnorty = function() {
+            $scope.data = {}
+            var myPopup = $ionicPopup.show({
+                template: '<input type="text" ng-model="data.snorty">',
+                title: 'Create a new snorty',
+                scope: $scope,
+                buttons: [
+                    { text: 'Cancel' },
+                    {
+                        text: '<b>Save</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            if (!$scope.data.snorty) {
+                                e.preventDefault();
+                            } else {
+                                return $scope.data.snorty;
+                            }
+                        }
+                    }
+                ]
+            }).then(function(res) {
+                User.createSnorty(res).then(function(rawData) {
+                    if (rawData.data.status == 'success') {
+                        $ionicPopup.alert({title: 'Snorty Added'});
+                    } else {
+                        $ionicPopup.alert({title: rawData.data.message});
+                    }
+                });
+            });
+        };
     });

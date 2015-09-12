@@ -13,8 +13,8 @@
         <ion-list ng-if="people.length" show-delete="true">
             <div class="list card" ng-repeat="person in people">
               <ion-item>
-                <ion-delete-button class="ion-minus-circled" ng-click="removeHuman({{ groupId }}, {{ person.id }}, '{{ person.name }}')"></ion-delete-button>
                 {{ person.name }}
+                <ion-delete-button class="ion-minus-circled icon-right" ng-click="removeHuman({{ groupId }}, {{ person.id }}, '{{ person.name }}')"></ion-delete-button>
               </ion-item>
             </div>
         </ion-list>

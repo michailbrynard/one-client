@@ -114,4 +114,8 @@ angular.module('starter.services.account', [])
         self.canUpload = function() {
             return $http.get(API + '/one/');
         }
+
+        self.createSnorty = function(snort) {
+            return $http.post(API + '/snorties/', {'message' : snort});
+        }
     });
