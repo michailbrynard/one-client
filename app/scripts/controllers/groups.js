@@ -50,7 +50,7 @@ angular.module('starter.controllers.groups', [])
         });
     })
 
-    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
+    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $http, $ionicModal, Groups) {
         'use strict';
         var groupId = $stateParams.groupId;
         if (groupId == null) {
@@ -103,8 +103,26 @@ angular.module('starter.controllers.groups', [])
                     'uploadedAt': rawData.data.results[i].created_timestamp,
                     'imageUrl': rawData.data.results[i].image.image
                 };
+                $scope.nextUrl = rawData.data.next;
             }
             $scope.items = items;
             $ionicLoading.hide();
         });
+
+        $scope.loadNext = function () {
+            console.log($scope.nextUrl);
+            $http.get($scope.nextUrl).success(
+                function (rawData) {
+                    console.log(JSON.stringify(rawData));
+                    for (var i = 0; i < rawData.results.length; i++) {
+                        $scope.items.push({
+                            'imageUrl': rawData.results[i].image.image,
+                            'uploadedAt': rawData.results[i].image.created_timestamp
+                        });
+                        $scope.nextUrl = rawData.next;
+                    }
+                }
+            );
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        };
     });

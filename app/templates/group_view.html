@@ -19,5 +19,10 @@
                 </div>
             </div>
         </ion-list>
+        <ion-infinite-scroll ng-if="nextUrl"
+                             icon="ion-loading-c"
+                             on-infinite="loadNext()"
+                             immediate-check="false">
+        </ion-infinite-scroll>
     </ion-content>
 </ion-view>
