@@ -12,3 +12,7 @@ install:
 
 run:
 	cordova run andriod -- device
+
+build:
+	grunt build
+	cordova build android

@@ -45,7 +45,6 @@ angular.module('starter.controllers', [])
                     template: 'Signing In...'
                 });
                 User.login(user.email, user.password).then(function (res) {
-                    window.alert('Login Success: ' + JSON.stringify(res.data));
                     $ionicLoading.hide();
                     $state.go('tab.camera');
                 }).catch(function (error) {
@@ -63,7 +62,6 @@ angular.module('starter.controllers', [])
         if (!Auth.isAuthed()) {
             $state.go('login');
         }
-		alert('In camera controller');
 
         //TODO: Figure out why Upload doesn't work on Android and FileTransfer doesnt work on iOS
         $scope.getPicture = function () {
