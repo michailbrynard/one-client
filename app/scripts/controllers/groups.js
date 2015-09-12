@@ -27,9 +27,6 @@ angular.module('starter.controllers.groups', [])
                     $ionicLoading.hide();
                     $scope.modal.hide();
                     alert('Group Added');
-                }).catch(function (error) {
-                    window.alert('Error:' + error.message);
-                    $ionicLoading.hide();
                 });
             } else {
                 window.alert('Please fill all details');
@@ -52,104 +49,98 @@ angular.module('starter.controllers.groups', [])
 
     .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $http, $ionicModal, Groups, $ionicPopup) {
         'use strict';
-            var groupId = $stateParams.groupId;
-            if (groupId == null) {
-                $state.go('tab.group');
-                return;
-            }
-            $scope.groupId = groupId;
-            var viewedUrls = [];
-            $ionicLoading.show({template: 'Loading...'});
+        var groupId = $stateParams.groupId;
+        if (groupId == null) {
+            $state.go('tab.group');
+            return;
+        }
+        $scope.groupId = groupId;
+        var viewedUrls = [];
+        $ionicLoading.show({template: 'Loading...'});
 
-            $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
-                scope: $scope
-            }).then(function (modal) {
-                $scope.modal = modal;
-            });
+        $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
+            scope: $scope
+        }).then(function (modal) {
+            $scope.modal = modal;
+        });
 
-            $scope.addUser = function (email) {
-                console.log('Create User Function called');
-                if (email) {
-                    $ionicLoading.show({
-                        template: 'Adding Person...'
-                    });
-                    Groups.addUser(groupId, email).then(function () {
-
-                        $ionicLoading.hide();
-                        $scope.modal.hide();
-                        alert('Person Added');
-                    }).catch(function (error) {
-                        window.alert('Error:' + error.message);
-                        $ionicLoading.hide();
-                    });
-                } else {
-                    window.alert('Please fill all details');
-                }
-            };
-
-            Groups.getGroup(groupId).then(function (rawData) {
-                var people = [];
-                for (var i = 0; i < rawData.data.results.length; i++) {
-                    people[i] = {
-                        'id': rawData.data.results[i].user.id,
-                        'name': rawData.data.results[i].user.first_name
-                    };
-                }
-                $scope.people = people;
-            });
-            Groups.getImages(groupId).then(function (rawData) {
-                var items = [];
-                for (var i = 0; i < rawData.data.results.length; i++) {
-                    items[i] = {
-                        'uploader': rawData.data.results[i].image.user.first_name,
-                        'uploadedAt': rawData.data.results[i].created_timestamp,
-                        'imageUrl': rawData.data.results[i].image.image
-                    };
-                    $scope.nextUrl = rawData.data.next;
-                }
-                $scope.items = items;
-                $ionicLoading.hide();
-            });
-
-            $scope.loadNext = function () {
-                if ($scope.nextUrl && viewedUrls.indexOf($scope.nextUrl) < 0) {
-                    viewedUrls.push($scope.nextUrl);
-                    console.log($scope.nextUrl);
-                    $http.get($scope.nextUrl).success(
-                        function (rawData) {
-                            console.log(JSON.stringify(rawData));
-                            for (var i = 0; i < rawData.results.length; i++) {
-                                $scope.items.push({
-                                    'uploader': rawData.results[i].image.user.first_name,
-                                    'imageUrl': rawData.results[i].image.image,
-                                    'uploadedAt': rawData.results[i].image.created_timestamp
-                                });
-                                $scope.nextUrl = rawData.next;
-                            }
-                        }
-                    );
-                    $scope.$broadcast('scroll.infiniteScrollComplete');
-                }
-            };
-            $scope.removeHuman = function(groupId, humanId, name) {
-                $ionicPopup.confirm({
-                    title: 'Confirm',
-                    template: 'Are you sure you would like to remove ' + name
-                    });
-                    confirmPopup.then(function(res) {
-                    if(res) {
-                        Groups.removeHuman(groupId, humanId).then(function(rawData) {
-                            if (rawData.data.status == 'success') {
-                                $ionicPopup.alert({title: 'Deleted them'});
-                            } else {
-                                $ionicPopup.alert({title: rawData.data.message});
-                            }
-                        }).catch(function (error) {
-                            $ionicPopup.alert({title: "Error", template:error.message});
-                            $ionicLoading.hide();
-                        });;
-                    }
+        $scope.addUser = function (email) {
+            console.log('Create User Function called');
+            if (email) {
+                $ionicLoading.show({
+                    template: 'Adding Person...'
                 });
+                Groups.addUser(groupId, email).then(function () {
 
-            };
+                    $ionicLoading.hide();
+                    $scope.modal.hide();
+                    alert('Person Added');
+                });
+            } else {
+                window.alert('Please fill all details');
+            }
+        };
+
+        Groups.getGroup(groupId).then(function (rawData) {
+            var people = [];
+            for (var i = 0; i < rawData.data.results.length; i++) {
+                people[i] = {
+                    'id': rawData.data.results[i].user.id,
+                    'name': rawData.data.results[i].user.first_name
+                };
+            }
+            $scope.people = people;
+        });
+        Groups.getImages(groupId).then(function (rawData) {
+            var items = [];
+            for (var i = 0; i < rawData.data.results.length; i++) {
+                items[i] = {
+                    'uploader': rawData.data.results[i].image.user.first_name,
+                    'uploadedAt': rawData.data.results[i].created_timestamp,
+                    'imageUrl': rawData.data.results[i].image.image
+                };
+                $scope.nextUrl = rawData.data.next;
+            }
+            $scope.items = items;
+            $ionicLoading.hide();
+        });
+
+        $scope.loadNext = function () {
+            if ($scope.nextUrl && viewedUrls.indexOf($scope.nextUrl) < 0) {
+                viewedUrls.push($scope.nextUrl);
+                console.log($scope.nextUrl);
+                $http.get($scope.nextUrl).success(
+                    function (rawData) {
+                        console.log(JSON.stringify(rawData));
+                        for (var i = 0; i < rawData.results.length; i++) {
+                            $scope.items.push({
+                                'uploader': rawData.results[i].image.user.first_name,
+                                'imageUrl': rawData.results[i].image.image,
+                                'uploadedAt': rawData.results[i].image.created_timestamp
+                            });
+                            $scope.nextUrl = rawData.next;
+                        }
+                    }
+                );
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            }
+        };
+        $scope.removeHuman = function(groupId, humanId) {
+            window.alert('name');
+            $ionicPopup.confirm({
+                title: 'Confirm',
+                template: 'Are you sure you would like to remove them?'
+            }).then(function(res) {
+                if(res) {
+                    Groups.removeHuman(groupId, humanId).then(function(rawData) {
+                        if (rawData.data.status == 'success') {
+                            $ionicPopup.alert({title: 'Deleted them'});
+                        } else {
+                            $ionicPopup.alert({title: rawData.data.message});
+                        }
+                    });
+                }
+            });
+
+        };
     });
