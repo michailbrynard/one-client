@@ -6,6 +6,7 @@ angular.module('starter.controllers.dashboard', [])
         $ionicLoading.show({
             template: 'Loading...'
         });
+        var viewedUrls = [];
 
 
         var refreshData = function () {
@@ -32,11 +33,9 @@ angular.module('starter.controllers.dashboard', [])
             );
         };
 
-        URLs = [];
-
         $scope.loadNext = function () {
-            if ($scope.nextUrl && URLs.indexOf($scope.nextUrl) < 0) {
-                URLs.push($scope.nextUrl);
+            if ($scope.nextUrl && viewedUrls.indexOf($scope.nextUrl) < 0) {
+                viewedUrls.push($scope.nextUrl);
                 $http.get($scope.nextUrl).success(
                     function (rawData) {
                         for (var i = 0; i < rawData.results.length; i++) {

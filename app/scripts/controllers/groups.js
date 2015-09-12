@@ -58,6 +58,7 @@ angular.module('starter.controllers.groups', [])
                 $state.go('tab.group');
                 return;
             }
+            var viewedUrls = [];
             $ionicLoading.show({template: 'Loading...'});
 
             $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
@@ -111,14 +112,15 @@ angular.module('starter.controllers.groups', [])
             });
 
             $scope.loadNext = function () {
-                if ($scope.nextUrl) {
+                if ($scope.nextUrl && viewedUrls.indexOf($scope.nextUrl) < 0) {
+                    viewedUrls.push($scope.nextUrl);
                     console.log($scope.nextUrl);
                     $http.get($scope.nextUrl).success(
                         function (rawData) {
                             console.log(JSON.stringify(rawData));
                             for (var i = 0; i < rawData.results.length; i++) {
                                 $scope.items.push({
-                                    'uploader': rawData.data.results[i].user_group.user.first_name,
+                                    'uploader': rawData.results[i].user_group.user.first_name,
                                     'imageUrl': rawData.results[i].image.image,
                                     'uploadedAt': rawData.results[i].image.created_timestamp
                                 });
