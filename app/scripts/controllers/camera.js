@@ -22,7 +22,6 @@ angular.module('starter.controllers.camera', [])
                     // window.alert(JSON.stringify(rawData));
                     if (rawData.data.status == 'True') {
                         if (ionic.Platform.isIOS()) {
-                            alert('You are using ios');
                             var options = {
                                 quality: 75,
                                 destinationType: Camera.DestinationType.DATA_URL,
@@ -93,7 +92,6 @@ angular.module('starter.controllers.camera', [])
                             });
 
                         } else if (ionic.Platform.isAndroid()) {
-                            alert('You are using Android');
                             var camera_options = {
                                 quality: 75,
                                 sourceType: Camera.PictureSourceType.CAMERA,
