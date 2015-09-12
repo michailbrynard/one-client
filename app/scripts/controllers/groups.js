@@ -133,8 +133,7 @@ angular.module('starter.controllers.groups', [])
             $ionicPopup.confirm({
                 title: 'Confirm',
                 template: 'Are you sure you would like to remove ' + name
-            });
-            confirmPopup.then(function (res) {
+            }).then(function (res) {
                 if (res) {
                     Groups.removeHuman(groupId, humanId).then(function (rawData) {
                         if (rawData.data.status == 'success') {
