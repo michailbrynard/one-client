@@ -52,77 +52,81 @@ angular.module('starter.controllers.groups', [])
 
     .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $http, $ionicModal, Groups) {
         'use strict';
-        var groupId = $stateParams.groupId;
-        if (groupId == null) {
-            $state.go('tab.group');
-            return;
-        }
-        $ionicLoading.show({template: 'Loading...'});
-
-        $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
-            scope: $scope
-        }).then(function (modal) {
-            $scope.modal = modal;
-        });
-
-        $scope.addUser = function (email) {
-            console.log('Create User Function called');
-            if (email) {
-                $ionicLoading.show({
-                    template: 'Adding Person...'
-                });
-                Groups.addUser(groupId, email).then(function () {
-
-                    $ionicLoading.hide();
-                    $scope.modal.hide();
-                    alert('Person Added');
-                }).catch(function (error) {
-                    window.alert('Error:' + error.message);
-                    $ionicLoading.hide();
-                });
-            } else {
-                window.alert('Please fill all details');
+        document.addEventListener("deviceready", function () {
+            var groupId = $stateParams.groupId;
+            if (groupId == null) {
+                $state.go('tab.group');
+                return;
             }
-        };
+            $ionicLoading.show({template: 'Loading...'});
 
-        Groups.getGroup(groupId).then(function (rawData) {
-            var people = [];
-            for (var i = 0; i < rawData.data.results.length; i++) {
-                people[i] = {
-                    'id': rawData.data.results[i].user.id,
-                    'name': rawData.data.results[i].user.first_name
-                };
-            }
-            $scope.people = people;
-        });
-        Groups.getImages(groupId).then(function (rawData) {
-            var items = [];
-            for (var i = 0; i < rawData.data.results.length; i++) {
-                items[i] = {
-                    'uploader': rawData.data.results[i].user_group.user.first_name,
-                    'uploadedAt': rawData.data.results[i].created_timestamp,
-                    'imageUrl': rawData.data.results[i].image.image
-                };
-                $scope.nextUrl = rawData.data.next;
-            }
-            $scope.items = items;
-            $ionicLoading.hide();
-        });
+            $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
+                scope: $scope
+            }).then(function (modal) {
+                $scope.modal = modal;
+            });
 
-        $scope.loadNext = function () {
-            console.log($scope.nextUrl);
-            $http.get($scope.nextUrl).success(
-                function (rawData) {
-                    console.log(JSON.stringify(rawData));
-                    for (var i = 0; i < rawData.results.length; i++) {
-                        $scope.items.push({
-                            'imageUrl': rawData.results[i].image.image,
-                            'uploadedAt': rawData.results[i].image.created_timestamp
-                        });
-                        $scope.nextUrl = rawData.next;
-                    }
+            $scope.addUser = function (email) {
+                console.log('Create User Function called');
+                if (email) {
+                    $ionicLoading.show({
+                        template: 'Adding Person...'
+                    });
+                    Groups.addUser(groupId, email).then(function () {
+
+                        $ionicLoading.hide();
+                        $scope.modal.hide();
+                        alert('Person Added');
+                    }).catch(function (error) {
+                        window.alert('Error:' + error.message);
+                        $ionicLoading.hide();
+                    });
+                } else {
+                    window.alert('Please fill all details');
                 }
-            );
-            $scope.$broadcast('scroll.infiniteScrollComplete');
-        };
+            };
+
+            Groups.getGroup(groupId).then(function (rawData) {
+                var people = [];
+                for (var i = 0; i < rawData.data.results.length; i++) {
+                    people[i] = {
+                        'id': rawData.data.results[i].user.id,
+                        'name': rawData.data.results[i].user.first_name
+                    };
+                }
+                $scope.people = people;
+            });
+            Groups.getImages(groupId).then(function (rawData) {
+                var items = [];
+                for (var i = 0; i < rawData.data.results.length; i++) {
+                    items[i] = {
+                        'uploader': rawData.data.results[i].user_group.user.first_name,
+                        'uploadedAt': rawData.data.results[i].created_timestamp,
+                        'imageUrl': rawData.data.results[i].image.image
+                    };
+                    $scope.nextUrl = rawData.data.next;
+                }
+                $scope.items = items;
+                $ionicLoading.hide();
+            });
+
+            $scope.loadNext = function () {
+                if ($scope.nextUrl) {
+                    console.log($scope.nextUrl);
+                    $http.get($scope.nextUrl).success(
+                        function (rawData) {
+                            console.log(JSON.stringify(rawData));
+                            for (var i = 0; i < rawData.results.length; i++) {
+                                $scope.items.push({
+                                    'imageUrl': rawData.results[i].image.image,
+                                    'uploadedAt': rawData.results[i].image.created_timestamp
+                                });
+                                $scope.nextUrl = rawData.next;
+                            }
+                        }
+                    );
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                }
+            };
+        });
     });

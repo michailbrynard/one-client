@@ -1,5 +1,5 @@
 <ion-view view-title="Group Photos">
-    <ion-content class="padding">
+    <ion-content class="padding" overflow-scroll="true">
 
         <button ng-click="modal.show()" ng-if="items.length"
                 class="button button-full button-balanced icon-left ion-person-add">
@@ -24,5 +24,9 @@
                              on-infinite="loadNext()"
                              immediate-check="false">
         </ion-infinite-scroll>
+        <button ng-click="loadNext()"
+                class="button button-full button-balanced icon-left ion-person-add">
+            Load More
+        </button>
     </ion-content>
 </ion-view>
