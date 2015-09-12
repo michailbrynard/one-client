@@ -1,15 +1,18 @@
 /*global angular, console, window, alert, ionic */
 
 angular.module('starter.controllers.dashboard', [])
-    .controller('MyPhotosCtrl', function ($scope, $http, Images, $ionicLoading, $ionicPopup) {
+    .controller('MyPhotosCtrl', function ($scope, $http, $window, Images, $ionicLoading, $ionicPopup) {
         'use strict';
         $ionicLoading.show({
             template: 'Loading...'
         });
         var viewedUrls = [];
 
-
         var refreshData = function () {
+            if ($window.localStorage.myPhotos){
+                $scope.items = JSON.parse($window.localStorage.myPhotos);
+                $ionicLoading.hide();
+            }
             Images.query().success(
                 function (rawData) {
                     console.log(JSON.stringify(rawData));
@@ -21,11 +24,12 @@ angular.module('starter.controllers.dashboard', [])
                         };
                     }
                     $scope.items = items;
+                    $window.localStorage.myPhotos = JSON.stringify(items);
+                    $ionicLoading.hide();
                     $scope.nextUrl = rawData.next;
                     console.log(items);
                     console.log('URL');
                     console.log($scope.nextUrl);
-                    $ionicLoading.hide();
                     if (items.length == 0) {
                         $ionicPopup.alert({title: 'You have not uploaded anything yet'});
                     }
