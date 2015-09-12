@@ -164,6 +164,8 @@ angular.module('starter.controllers.camera', [])
                                             }, function (progress) {
                                                 // constant progress updates
                                             });
+                                        } else {
+                                            $ionicPopup.alert({title: "You should have selected a group"});
                                         }
                                     });
                                 });
