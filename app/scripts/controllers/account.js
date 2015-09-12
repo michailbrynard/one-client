@@ -63,4 +63,5 @@ angular.module('starter.controllers.account', [])
             Auth.logout();
             $state.go('login');
         };
+
     });
