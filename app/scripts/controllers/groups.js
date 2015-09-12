@@ -123,10 +123,10 @@ angular.module('starter.controllers.groups', [])
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             }
         };
-        $scope.removeHuman = function(groupId, humanId) {
+        $scope.removeHuman = function(groupId, humanId, name) {
             $ionicPopup.confirm({
                 title: 'Confirm',
-                template: 'Are you sure you would like to remove them?'
+                template: 'Are you sure you would like to remove ' + name + '?'
             }).then(function(res) {
                 if(res) {
                     Groups.removeHuman(groupId, humanId).then(function(rawData) {
