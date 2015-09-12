@@ -10,11 +10,6 @@
                 </div>
             </div>
         </ion-list>
-        <ion-list ng-if="!items.length">
-            <ion-item class="textCenter">
-                <i class="icon ion-loading-c"></i> Loading Photos
-            </ion-item>
-        </ion-list>
         <ion-infinite-scroll ng-if="nextUrl"
                              icon="ion-loading-c"
                              on-infinite="loadNext()"

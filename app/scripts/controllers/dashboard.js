@@ -1,8 +1,11 @@
 /*global angular, console, window, alert, ionic */
 
 angular.module('starter.controllers.dashboard', [])
-    .controller('MyPhotosCtrl', function ($scope, $http, Images) {
+    .controller('MyPhotosCtrl', function ($scope, $http, Images, $ionicLoading, $ionicPopup) {
         'use strict';
+        $ionicLoading.show({
+            template: 'Loading...'
+        });
 
 
         var refreshData = function () {
@@ -21,22 +24,31 @@ angular.module('starter.controllers.dashboard', [])
                     console.log(items);
                     console.log('URL');
                     console.log($scope.nextUrl);
+                    $ionicLoading.hide();
+                    if (items.length == 0) {
+                        $ionicPopup.alert({title: 'You have not uploaded anything yet'});
+                    }
                 }
             );
         };
 
+        URLs = [];
+
         $scope.loadNext = function () {
-            $http.get($scope.nextUrl).success(
-                function (rawData) {
-                    for (var i = 0; i < rawData.results.length; i++) {
-                        $scope.items.push({
-                            'imageUrl': rawData.results[i].image.image,
-                            'uploadedAt': rawData.results[i].image.created_timestamp
-                        });
+            if ($scope.nextUrl && URLs.indexOf($scope.nextUrl) < 0) {
+                URLs.push($scope.nextUrl);
+                $http.get($scope.nextUrl).success(
+                    function (rawData) {
+                        for (var i = 0; i < rawData.results.length; i++) {
+                            $scope.items.push({
+                                'imageUrl': rawData.results[i].image.image,
+                                'uploadedAt': rawData.results[i].image.created_timestamp
+                            });
+                        }
                         $scope.nextUrl = rawData.next;
                     }
-                }
-            );
+                );
+            }
             $scope.$broadcast('scroll.infiniteScrollComplete');
         };
 

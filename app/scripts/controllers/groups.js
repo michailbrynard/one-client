@@ -2,7 +2,7 @@
 
 angular.module('starter.controllers.groups', [])
 
-    .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
+    .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups, $ionicPopup) {
         'use strict';
         $ionicLoading.show({template: 'Loading...'});
         $scope.openGroup = function (id) {
