@@ -84,9 +84,6 @@ angular.module('starter.controllers.groups', [])
                     $ionicLoading.hide();
                     $scope.modal.hide();
                     alert('Person Added');
-                }).catch(function (error) {
-                    window.alert('Error:' + error.message);
-                    $ionicLoading.hide();
                 });
             } else {
                 window.alert('Please fill all details');
@@ -142,8 +139,7 @@ angular.module('starter.controllers.groups', [])
             $ionicPopup.confirm({
                 title: 'Confirm',
                 template: 'Are you sure you would like to remove ' + name
-            });
-            confirmPopup.then(function (res) {
+            }).then(function (res) {
                 if (res) {
                     Groups.removeHuman(groupId, humanId).then(function (rawData) {
                         if (rawData.data.status == 'success') {
@@ -151,11 +147,7 @@ angular.module('starter.controllers.groups', [])
                         } else {
                             $ionicPopup.alert({title: rawData.data.message});
                         }
-                    }).catch(function (error) {
-                        $ionicPopup.alert({title: "Error", template: error.message});
-                        $ionicLoading.hide();
                     });
-                    ;
                 }
             });
 
