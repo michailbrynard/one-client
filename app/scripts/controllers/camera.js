@@ -89,7 +89,7 @@ angular.module('starter.controllers.camera', [])
                                     });
                                 });
                             }, function (err) {
-                                alert(err);
+                                window.alert(err);
                             });
 
                         } else if (ionic.Platform.isAndroid()) {
@@ -158,7 +158,7 @@ angular.module('starter.controllers.camera', [])
                                                 $ionicLoading.hide();
                                                 $ionicPopup.alert({title: "Image Uploaded"});
                                             }, function (err) {
-                                                alert('ERROR: ' + JSON.stringify(err));
+                                                $ionicPopup.alert({title: 'Error', template: JSON.stringify(err)});
                                                 $ionicLoading.hide();
                                                 //alert(JSON.stringify(err));
                                             }, function (progress) {

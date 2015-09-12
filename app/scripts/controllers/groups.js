@@ -17,7 +17,6 @@ angular.module('starter.controllers.groups', [])
             $scope.modal = modal;
         });
         $scope.addGroup = function (name) {
-            console.log('Create User Function called');
             if (name) {
                 $ionicLoading.show({
                     template: 'Adding Group...'
@@ -26,10 +25,10 @@ angular.module('starter.controllers.groups', [])
 
                     $ionicLoading.hide();
                     $scope.modal.hide();
-                    alert('Group Added');
+                    $ionicPopup.alert({title: 'Group Added'});
                 });
             } else {
-                window.alert('Please fill all details');
+                $ionicPopup.alert({title: 'Please fill all details'});
             }
         };
 
@@ -65,7 +64,6 @@ angular.module('starter.controllers.groups', [])
         });
 
         $scope.addUser = function (email) {
-            console.log('Create User Function called');
             if (email) {
                 $ionicLoading.show({
                     template: 'Adding Person...'
@@ -74,10 +72,10 @@ angular.module('starter.controllers.groups', [])
 
                     $ionicLoading.hide();
                     $scope.modal.hide();
-                    alert('Person Added');
+                    $ionicPopup.alert({title: 'Person Added'});
                 });
             } else {
-                window.alert('Please fill all details');
+                $ionicPopup.alert({title: 'Please fill all details'});
             }
         };
 
@@ -126,7 +124,6 @@ angular.module('starter.controllers.groups', [])
             }
         };
         $scope.removeHuman = function(groupId, humanId) {
-            window.alert('name');
             $ionicPopup.confirm({
                 title: 'Confirm',
                 template: 'Are you sure you would like to remove them?'
@@ -141,6 +138,5 @@ angular.module('starter.controllers.groups', [])
                     });
                 }
             });
-
         };
     });
