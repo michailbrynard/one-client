@@ -14,7 +14,6 @@ angular.module('starter', [
     'angularMoment',
     'ngCordova',
     'ngFileUpload',
-    'starter.controllers',
     'starter.controllers.account',
     'starter.controllers.camera',
     'starter.controllers.dashboard',

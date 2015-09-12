@@ -1,3 +1,5 @@
+/*global angular, console, window, alert, ionic */
+
 angular.module('starter.controllers.groups', [])
 
     .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups) {
