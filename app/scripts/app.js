@@ -15,8 +15,10 @@ angular.module('starter', [
     'ngCordova',
     'ngFileUpload',
     'starter.controllers',
-    'starter.controllers.login',,
+    'starter.controllers.account',
     'starter.controllers.camera',
+    'starter.controllers.dashboard',
+    'starter.controllers.groups',
     'starter.services'
 ])
 
