@@ -52,7 +52,6 @@ angular.module('starter.controllers.groups', [])
 
     .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $http, $ionicModal, Groups) {
         'use strict';
-        document.addEventListener("deviceready", function () {
             var groupId = $stateParams.groupId;
             if (groupId == null) {
                 $state.go('tab.group');
@@ -131,5 +130,4 @@ angular.module('starter.controllers.groups', [])
                     $scope.$broadcast('scroll.infiniteScrollComplete');
                 }
             };
-        });
     });
