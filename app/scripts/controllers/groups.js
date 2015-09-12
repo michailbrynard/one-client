@@ -17,7 +17,6 @@ angular.module('starter.controllers.groups', [])
             $scope.modal = modal;
         });
         $scope.addGroup = function (name) {
-            console.log('Create User Function called');
             if (name) {
                 $ionicLoading.show({
                     template: 'Adding Group...'
@@ -26,13 +25,10 @@ angular.module('starter.controllers.groups', [])
 
                     $ionicLoading.hide();
                     $scope.modal.hide();
-                    alert('Group Added');
-                }).catch(function (error) {
-                    window.alert('Error:' + error.message);
-                    $ionicLoading.hide();
+                    $ionicPopup.alert({title: 'Group Added'});
                 });
             } else {
-                window.alert('Please fill all details');
+                $ionicPopup.alert({title: 'Please fill all details'});
             }
         };
 

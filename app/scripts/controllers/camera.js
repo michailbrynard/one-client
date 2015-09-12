@@ -22,7 +22,6 @@ angular.module('starter.controllers.camera', [])
                     // window.alert(JSON.stringify(rawData));
                     if (rawData.data.status == 'True') {
                         if (ionic.Platform.isIOS()) {
-                            alert('You are using ios');
                             var options = {
                                 quality: 75,
                                 destinationType: Camera.DestinationType.DATA_URL,
@@ -89,11 +88,10 @@ angular.module('starter.controllers.camera', [])
                                     });
                                 });
                             }, function (err) {
-                                alert(err);
+                                window.alert(err);
                             });
 
                         } else if (ionic.Platform.isAndroid()) {
-                            alert('You are using Android');
                             var camera_options = {
                                 quality: 75,
                                 sourceType: Camera.PictureSourceType.CAMERA,
@@ -158,7 +156,7 @@ angular.module('starter.controllers.camera', [])
                                                 $ionicLoading.hide();
                                                 $ionicPopup.alert({title: "Image Uploaded"});
                                             }, function (err) {
-                                                alert('ERROR: ' + JSON.stringify(err));
+                                                $ionicPopup.alert({title: 'Error', template: JSON.stringify(err)});
                                                 $ionicLoading.hide();
                                                 //alert(JSON.stringify(err));
                                             }, function (progress) {
