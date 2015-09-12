@@ -2,7 +2,7 @@
 
 angular.module('starter.controllers.groups', [])
 
-    .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, Groups, $ionicPopup) {
+    .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, $window, Groups, $ionicPopup) {
         'use strict';
         $ionicLoading.show({template: 'Loading...'});
         $scope.openGroup = function (id) {
@@ -32,6 +32,11 @@ angular.module('starter.controllers.groups', [])
             }
         };
 
+        if ($window.localStorage.groups) {
+            $scope.items = JSON.parse($window.localStorage.groups);
+            $ionicLoading.hide();
+        }
+
         Groups.list().then(function (rawData) {
             var items = [];
             for (var i = 0; i < rawData.data.results.length; i++) {
@@ -42,6 +47,7 @@ angular.module('starter.controllers.groups', [])
                 };
             }
             $scope.items = items;
+            $window.localStorage.groups = JSON.stringify(items);
             $ionicLoading.hide();
         });
     })
