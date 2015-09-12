@@ -9,6 +9,8 @@ install:
 	grunt build
 	cordova platform add android
 	ionic plugin add cordova-plugin-whitelist
+	ionic plugin add cordova-plugin-camera
+	ionic plugin add cordova-plugin-file-transfer
 
 run:
 	cordova run andriod -- device
