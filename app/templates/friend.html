@@ -1,19 +1,17 @@
-<ion-view view-title="Groups">
+<ion-view view-title="Friends">
     <ion-content class="padding" overflow-scroll="true">
         <div class="list">
-
             <a ng-repeat="item in items"
                href=""
-               ng-click="openGroup(item.id)"
+               ng-click="openFriend(item.id)"
                class="item">
                <h2>{{item.title}}</h2>
                <p>{{item.last_upload}}</p>
             </a>
         <button ng-click="modal.show()"
                 class="button button-full button-balanced icon-left ion-person-add">
-            Add Group
+            Invite Friend
         </button>
-
         </div>
     </ion-content>
 </ion-view>

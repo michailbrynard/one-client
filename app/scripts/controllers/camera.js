@@ -35,62 +35,22 @@ angular.module('starter.controllers.camera', [])
                             };
 
                             $cordovaCamera.getPicture(options).then(function (imageData) {
-                                Groups.list().then(function(rawData) {
-                                    $scope.data = {};
-                                    var values = '';
-                                    var items = [];
-                                    for (var i = 0; i < rawData.data.results.length; i++) {
-                                        items[i] = rawData.data.results[i].group.id;
-                                        var values = values + '<ion-checkbox ng-model="data.groups['
-                                            + rawData.data.results[i].group.id
-                                            + ']">'
-                                            + rawData.data.results[i].group.group_name
-                                            + '</ion-checkbox>';
-                                    }
-                                    $ionicPopup.show({
-                                        template: values,
-                                        title: 'Select Groups',
-                                        subTitle: 'Which grups do you want to send to?',
-                                        scope: $scope,
-                                        buttons: [
-                                            { text: 'Cancel' },
-                                            {
-                                                text: '<b>Upload</b>',
-                                                type: 'button-positive',
-                                                onTap: function(e) {
-                                                    return $scope.data;
-                                                }
-                                            }
-                                        ]
-                                    }).then(function(res) {
-                                        var l = '';
-                                        for (var key in res.groups) {
-                                          if (res.groups.hasOwnProperty(key)) {
-                                            l = l + ',' + key;
-                                          }
-                                        }
-                                        var g = l.substring(1);
-                                        if (g.length > 0) {
-                                            Upload.upload({
-                                                url: API + '/image/' + g,
-                                                fileName: 'image.jpeg',
-                                                fileFormDataName: 'image',
-                                                file: imageData
-                                            }).progress(function (evt) {
-                                                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                                console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-                                            }).success(function (data, status, headers, config) {
-                                                $ionicPopup.alert({title: "Image Uploaded"});
-                                            }).error(function (data, status, headers, config) {
-                                                alert('error status: ' + status);
-                                            });
-                                        }
-                                    });
+                                Upload.upload({
+                                    url: API + '/image/',
+                                    fileName: 'image.jpeg',
+                                    fileFormDataName: 'image',
+                                    file: imageData
+                                }).progress(function (evt) {
+                                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                                    console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                                }).success(function (data, status, headers, config) {
+                                    $ionicPopup.alert({title: "Image Uploaded"});
+                                }).error(function (data, status, headers, config) {
+                                    alert('error status: ' + status);
                                 });
                             }, function (err) {
                                 window.alert(err);
                             });
-
                         } else if (ionic.Platform.isAndroid()) {
                             var camera_options = {
                                 quality: 75,
@@ -104,68 +64,27 @@ angular.module('starter.controllers.camera', [])
                             };
 
                             $cordovaCamera.getPicture(camera_options).then(function (imagePath) {
-                                Groups.list().then(function(rawData) {
-                                    $scope.data = {};
-                                    var values = '';
-                                    var items = [];
-                                    for (var i = 0; i < rawData.data.results.length; i++) {
-                                        items[i] = rawData.data.results[i].group.id;
-                                        var values = values + '<ion-checkbox ng-model="data.groups['
-                                            + rawData.data.results[i].group.id
-                                            + ']">'
-                                            + rawData.data.results[i].group.group_name
-                                            + '</ion-checkbox>';
-                                    }
-                                    $ionicPopup.show({
-                                        template: values,
-                                        title: 'Select Groups',
-                                        subTitle: 'Which groups do you want to send to?',
-                                        scope: $scope,
-                                        buttons: [
-                                            { text: 'Cancel' },
-                                            {
-                                                text: '<b>Upload</b>',
-                                                type: 'button-positive',
-                                                onTap: function(e) {
-                                                    return $scope.data;
-                                                }
-                                            }
-                                        ]
-                                    }).then(function(res) {
-                                        var l = '';
-                                        for (var key in res.groups) {
-                                          if (res.groups.hasOwnProperty(key)) {
-                                            l = l + ',' + key;
-                                          }
-                                        }
-                                        var g = l.substring(1);
-                                        if (g.length > 0) {
-                                            $ionicLoading.show({
-                                                template: 'Uploading...'
-                                            });
+                                $ionicLoading.show({
+                                    template: 'Uploading...'
+                                });
 
-                                            var options = {
-                                                fileKey: 'image',
-                                                fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
-                                                chunkedMode: true,
-                                                mimeType: 'image/jpg',
-                                                headers: {'Authorization': 'JWT ' + Auth.getToken(), 'Connection': 'close'}
-                                            };
+                                var options = {
+                                    fileKey: 'image',
+                                    fileName: imagePath.substr(imagePath.lastIndexOf('/') + 1),
+                                    chunkedMode: true,
+                                    mimeType: 'image/jpg',
+                                    headers: {'Authorization': 'JWT ' + Auth.getToken(), 'Connection': 'close'}
+                                };
 
-                                            $cordovaFileTransfer.upload(API + '/image/' + g, imagePath, options).then(function (result) {
-                                                $ionicLoading.hide();
-                                                $ionicPopup.alert({title: "Image Uploaded"});
-                                            }, function (err) {
-                                                $ionicPopup.alert({title: 'Error', template: JSON.stringify(err)});
-                                                $ionicLoading.hide();
-                                                //alert(JSON.stringify(err));
-                                            }, function (progress) {
-                                                // constant progress updates
-                                            });
-                                        } else {
-                                            $ionicPopup.alert({title: "You should have selected a group"});
-                                        }
-                                    });
+                                $cordovaFileTransfer.upload(API + '/image/', imagePath, options).then(function (result) {
+                                    $ionicLoading.hide();
+                                    $ionicPopup.alert({title: "Image Uploaded"});
+                                }, function (err) {
+                                    $ionicPopup.alert({title: 'Error', template: JSON.stringify(err)});
+                                    $ionicLoading.hide();
+                                    //alert(JSON.stringify(err));
+                                }, function (progress) {
+                                    // constant progress updates
                                 });
                             });
                         }

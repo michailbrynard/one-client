@@ -17,15 +17,15 @@ angular.module('starter', [
     'starter.controllers.account',
     'starter.controllers.camera',
     'starter.controllers.dashboard',
-    'starter.controllers.groups',
+    'starter.controllers.friends',
     'starter.services.account',
     'starter.services.camera',
     'starter.services.dashboard',
-    'starter.services.groups',
+    'starter.services.friends',
 ])
 
-    .constant('API', 'http://onepi.cf/api')
-    //.constant('API', 'http://127.0.0.1:8000/api')
+    //.constant('API', 'http://onepi.cf/api')
+    .constant('API', 'http://127.0.0.1:8000/api')
     .constant('REFRESH_INTERVAL', 3000)
 
     .config(function ($httpProvider, $ionicConfigProvider) {
@@ -102,26 +102,26 @@ angular.module('starter', [
                 }
             })
 
-            .state('tab.group', {
-                url: '/group',
+            .state('tab.friend', {
+                url: '/friend',
                 views: {
-                    'tab-group': {
-                        templateUrl: 'templates/group.html',
-                        controller: 'GroupListingCtrl'
+                    'tab-friend': {
+                        templateUrl: 'templates/friend.html',
+                        controller: 'FriendListingCtrl'
                     }
                 }
             })
 
-            .state('tab.groupView', {
-                url: '/group/view',
+            .state('tab.friendView', {
+                url: '/friend/view',
                 views: {
-                    'tab-group': {
-                        templateUrl: 'templates/group_view.html',
-                        controller: 'GroupViewCtrl'
+                    'tab-friend': {
+                        templateUrl: 'templates/friend_view.html',
+                        controller: 'FriendViewCtrl'
                     }
                 },
                 params: {
-                    groupId: null
+                    friendId: null
                 }
             })
 

@@ -1,106 +1,76 @@
 /*global angular, console, window, alert, ionic */
 
-angular.module('starter.controllers.groups', [])
+angular.module('starter.controllers.friends', [])
 
-    .controller('GroupListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, $window, Groups, $ionicPopup) {
+    .controller('FriendListingCtrl', function ($scope, $stateParams, $state, $ionicLoading, $ionicModal, $window, Friends, $ionicPopup) {
         'use strict';
         $ionicLoading.show({template: 'Loading...'});
-        $scope.openGroup = function (id) {
-            $state.go('tab.groupView', {
-                groupId: id
+        $scope.openFriend = function (id) {
+            $state.go('tab.friendView', {
+                friendId: id
             });
         };
 
-        $ionicModal.fromTemplateUrl('templates/group_create.html', {
+        $ionicModal.fromTemplateUrl('templates/friend_add.html', {
             scope: $scope
         }).then(function (modal) {
             $scope.modal = modal;
         });
-        $scope.addGroup = function (name) {
-            if (name) {
-                $ionicLoading.show({
-                    template: 'Adding Group...'
-                });
-                Groups.create(name).then(function () {
 
+        $scope.addFriend = function (email) {
+            if (email) {
+                $ionicLoading.show({
+                    template: 'Adding Friend...'
+                });
+                Friends.add(email).then(function () {
                     $ionicLoading.hide();
                     $scope.modal.hide();
-                    $ionicPopup.alert({title: 'Group Added'});
+                    $ionicPopup.alert({title: 'Friend Added'});
                 });
             } else {
                 $ionicPopup.alert({title: 'Please fill all details'});
             }
         };
 
-        if ($window.localStorage.groups) {
-            $scope.items = JSON.parse($window.localStorage.groups);
+        if ($window.localStorage.friend) {
+            $scope.items = JSON.parse($window.localStorage.friends);
             $ionicLoading.hide();
         }
 
-        Groups.list().then(function (rawData) {
+        Friends.list().then(function (rawData) {
             var items = [];
             for (var i = 0; i < rawData.data.results.length; i++) {
                 items[i] = {
-                    'id': rawData.data.results[i].group.id,
-                    'title': rawData.data.results[i].group.group_name,
+                    'id': rawData.data.results[i].friend.id,
+                    'title': rawData.data.results[i].friend.friend_name,
                     'last_upload': rawData.data.results[i].last_upload
                 };
             }
             $scope.items = items;
-            $window.localStorage.groups = JSON.stringify(items);
+            $window.localStorage.friends = JSON.stringify(items);
             $ionicLoading.hide();
         });
+
+        // Temp loader
+        $ionicLoading.hide();
     })
 
-    .controller('GroupViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $http, $ionicModal, $window, Groups, $ionicPopup) {
+    .controller('FriendViewCtrl', function ($scope, $stateParams, $state, $ionicLoading, $http, $ionicModal, $window, Friends, $ionicPopup) {
         'use strict';
-        var groupId = $stateParams.groupId;
-        if (groupId === null) {
-            $state.go('tab.group');
+        var friendId = $stateParams.friendId;
+        if (friendId === null) {
+            $state.go('tab.friend');
             return;
         }
-        $scope.groupId = groupId;
+        $scope.friendId = friendId;
         var viewedUrls = [];
         $ionicLoading.show({template: 'Loading...'});
-        if ($window.localStorage[groupId]) {
-            $scope.items = JSON.parse($window.localStorage[groupId]);
+        if ($window.localStorage[friendId]) {
+            $scope.items = JSON.parse($window.localStorage[friendId]);
             $ionicLoading.hide();
         }
 
-        $ionicModal.fromTemplateUrl('templates/group_add_person.html', {
-            scope: $scope
-        }).then(function (modal) {
-            $scope.modal = modal;
-        });
-
-        $scope.addUser = function (email) {
-            console.log('Create User Function called');
-            if (email) {
-                $ionicLoading.show({
-                    template: 'Adding Person...'
-                });
-                Groups.addUser(groupId, email).then(function () {
-
-                    $ionicLoading.hide();
-                    $scope.modal.hide();
-                    alert('Person Added');
-                });
-            } else {
-                window.alert('Please fill all details');
-            }
-        };
-
-        Groups.getGroup(groupId).then(function (rawData) {
-            var people = [];
-            for (var i = 0; i < rawData.data.results.length; i++) {
-                people[i] = {
-                    'id': rawData.data.results[i].user.id,
-                    'name': rawData.data.results[i].user.first_name
-                };
-            }
-            $scope.people = people;
-        });
-        Groups.getImages(groupId).then(function (rawData) {
+        Friends.getImages(friendId).then(function (rawData) {
             var items = [];
             for (var i = 0; i < rawData.data.results.length; i++) {
                 items[i] = {
@@ -111,7 +81,7 @@ angular.module('starter.controllers.groups', [])
                 $scope.nextUrl = rawData.data.next;
             }
             $scope.items = items;
-            $window.localStorage[groupId] = JSON.stringify(items);
+            $window.localStorage[friendId] = JSON.stringify(items);
             $ionicLoading.hide();
         });
 
@@ -135,13 +105,14 @@ angular.module('starter.controllers.groups', [])
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             }
         };
-        $scope.removeHuman = function (groupId, humanId, name) {
+        
+        $scope.removeFriend = function (userId, friendId, name) {
             $ionicPopup.confirm({
                 title: 'Confirm',
                 template: 'Are you sure you would like to remove ' + name
             }).then(function (res) {
                 if (res) {
-                    Groups.removeHuman(groupId, humanId).then(function (rawData) {
+                    Friends.remove(userId, friendId).then(function (rawData) {
                         if (rawData.data.status == 'success') {
                             $ionicPopup.alert({title: 'Deleted them'});
                         } else {
