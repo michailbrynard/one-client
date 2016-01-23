@@ -2,7 +2,7 @@
 
 angular.module('starter.controllers.camera', [])
 
-    .controller('CameraCtrl', function ($scope, $state, $ionicLoading, $cordovaFileTransfer, $cordovaCamera, Upload, User, Auth, API, Groups, $ionicPopup) {
+    .controller('CameraCtrl', function ($scope, $state, $ionicLoading, $cordovaFileTransfer, $cordovaCamera, Upload, User, Auth, API, $ionicPopup) {
         'use strict';
         if (!Auth.isAuthed()) {
             $state.go('login');
@@ -66,7 +66,7 @@ angular.module('starter.controllers.camera', [])
                             $cordovaCamera.getPicture(camera_options).then(function (imagePath) {
                                 $ionicLoading.show({
                                     template: 'Uploading...'
-                                });
+                                }); 
 
                                 var options = {
                                     fileKey: 'image',

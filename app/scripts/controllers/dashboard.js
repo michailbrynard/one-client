@@ -19,8 +19,8 @@ angular.module('starter.controllers.dashboard', [])
                     var items = [];
                     for (var i = 0; i < rawData.results.length; i++) {
                         items[i] = {
-                            'imageUrl': rawData.results[i].image.image,
-                            'uploadedAt': rawData.results[i].image.created_timestamp
+                            'imageUrl': rawData.results[i].image,
+                            'uploadedAt': rawData.results[i].created_timestamp
                         };
                     }
                     $scope.items = items;
@@ -44,8 +44,8 @@ angular.module('starter.controllers.dashboard', [])
                     function (rawData) {
                         for (var i = 0; i < rawData.results.length; i++) {
                             $scope.items.push({
-                                'imageUrl': rawData.results[i].image.image,
-                                'uploadedAt': rawData.results[i].image.created_timestamp
+                                'imageUrl': rawData.results[i].image,
+                                'uploadedAt': rawData.results[i].created_timestamp
                             });
                         }
                         $scope.nextUrl = rawData.next;
